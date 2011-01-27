@@ -9,10 +9,11 @@ Need to add following things:
 	-clock
 	-email client
 	-rss reader
-	-unpn client which can stream mp3 files as alarm clock
+	-unpn client which can stream mp3 files for a alarm clock
 	-interface to my 16x16 LED matrix
 	-interface to my 4x4 LED cube
 	-use build in microphone for FFT-->Music visualisation on the LEDs (start with Vu-meter)
+	-temperature sensor interface both on board and external (i2c)ds18xxx chip
 		
 
 //////////////////////////////////////////////////////////////////////////////////

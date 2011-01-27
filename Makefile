@@ -10,12 +10,15 @@ CFLAGS = \
 	-I ethernet/FreeTCPIP/net \
 	-I FreeRTOS/include \
 	-I FreeRTOS/portable/GCC/RX600 \
-	-I FreeRTOS
+	-I FreeRTOS \
+	-I ethernet/FreeTCPIP/sys \
+	-I dhcpc \
 	-DINCLUDE_HIGH_FREQUENCY_TIMER_TEST=1 \
 	$(END)
 
 
 CFILES_ENET = \
+	dhcpc/dhcpc.c \
 	ethernet/memb.c \
 	telnetd/telnetd.c \
 	telnetd/shell.c \

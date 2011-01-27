@@ -1354,7 +1354,7 @@ struct uip_conn
  * The uip_conn pointer can be used to access the current TCP
  * connection.
  */
-/*CCIF*/ extern struct uip_conn *uip_conn;
+/*uip.h:CCIF*/ extern struct uip_conn *uip_conn;
 #ifdef UIP_TCP
 
 /* The array containing all uIP connections. */

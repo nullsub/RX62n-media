@@ -132,7 +132,7 @@ typedef unsigned short uip_stats_t;
  *
  * \hideinitializer
  */
-#define UIP_CONF_UDP             0
+#define UIP_CONF_UDP             1
 
 /**
  * UDP checksums on or off
@@ -160,7 +160,7 @@ typedef unsigned short uip_stats_t;
 #include "ip_apps.h"
 
 //#define CCIF 
-//#define CC_REGISTER_ARG
+///UIP_UDP/#define CC_REGISTER_ARG
 
 #endif /* __UIP_CONF_H__ */
 
