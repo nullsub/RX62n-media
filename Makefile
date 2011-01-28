@@ -12,13 +12,11 @@ CFLAGS = \
 	-I FreeRTOS/portable/GCC/RX600 \
 	-I FreeRTOS \
 	-I ethernet/FreeTCPIP/sys \
-	-I dhcpc \
 	-DINCLUDE_HIGH_FREQUENCY_TIMER_TEST=1 \
 	$(END)
 
 
 CFILES_ENET = \
-	dhcpc/dhcpc.c \
 	ethernet/memb.c \
 	telnetd/telnetd.c \
 	telnetd/shell.c \
@@ -87,7 +85,7 @@ freertos.elf : $(OFILES)
 	rx-elf-gcc -x assembler-with-cpp -c $(CFLAGS) -O2 $< -o $@
 
 flash : freertos.elf
-	sudo rxusb -v freertos.elf
+	sudo ../flash-tools/rxusb -v freertos.elf
 
 clean :
 	rm -f $(OFILES) freertos.elf
