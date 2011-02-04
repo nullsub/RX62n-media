@@ -2,7 +2,7 @@
 This is based upon the FreeRTOS demo, stripped down and improved by Zizzle - mattpratt.au@gmail.com
 ---------------------------------------------------------------------------------
 
-I hope that my wifi board arrives soon.
+The Wifi Board arrived. Now I try to port the SPI driver from the examples to FreeRTOS.
 
 
 Need to add following things:
