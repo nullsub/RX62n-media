@@ -149,7 +149,7 @@
 #define mainSEM_TEST_PRIORITY		( tskIDLE_PRIORITY + 1 )
 #define mainBLOCK_Q_PRIORITY		( tskIDLE_PRIORITY + 2 )
 #define mainCREATOR_TASK_PRIORITY   ( tskIDLE_PRIORITY + 3 )
-#define mainuIP_TASK_PRIORITY		( tskIDLE_PRIORITY + 2 )
+#define WIFI_DRIVER_TASK_PRIORITY		( tskIDLE_PRIORITY + 2 )
 #define mainINTEGER_TASK_PRIORITY   ( tskIDLE_PRIORITY )
 #define mainGEN_QUEUE_TASK_PRIORITY	( tskIDLE_PRIORITY )
 #define mainFLOP_TASK_PRIORITY		( tskIDLE_PRIORITY )
@@ -158,7 +158,7 @@
 
 /* The WEB server uses string handling functions, which in turn use a bit more
 stack than most of the other tasks. */
-#define mainuIP_STACK_SIZE			( configMINIMAL_STACK_SIZE * 3 )
+#define WIFI_DRIVER_STACK_SIZE			( configMINIMAL_STACK_SIZE * 3 )
 
 
 /* The rate at which mainCHECK_LED will toggle when all the tasks are running
@@ -207,7 +207,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 /*
  * Contains the implementation of the WEB server.
  */
-extern void vuIP_Task( void *pvParameters );
+extern void wifi_driver_task( void *pvParameters );
 
 
 extern void tempature_task(void *pvParameters);
@@ -239,38 +239,30 @@ extern void HardwareSetup( void );
 
 	lcd_set_address(0, 0);
 
-	lcd_string(2,0, "Welcome to FreeRTOS");
-	lcd_string(5,0, "IP: ");
-	lcd_display_number(configIP_ADDR0);
-	lcd_display_char('.');
-	lcd_display_number(configIP_ADDR1);
-	lcd_display_char('.');
-	lcd_display_number(configIP_ADDR2);
-	lcd_display_char('.');
-	lcd_display_number(configIP_ADDR3);
+	lcd_string(LCD_LINE0,0, "   Welcome");
 
 	
 	/* The ethernet task. */
-	xTaskCreate( vuIP_Task, ( signed char * ) "uIP", mainuIP_STACK_SIZE, NULL, mainuIP_TASK_PRIORITY, NULL );
+	xTaskCreate( wifi_driver_task , ( signed char * ) "wifi_driver", WIFI_DRIVER_STACK_SIZE , NULL, WIFI_DRIVER_TASK_PRIORITY, NULL );
 
-	xTaskCreate( tempature_task, ( signed char * ) "tempature", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
+	//xTaskCreate( tempature_task, ( signed char * ) "tempature", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 
 
 	/* Create the standard demo tasks. */
-	vStartBlockingQueueTasks( mainBLOCK_Q_PRIORITY );
+	/*vStartBlockingQueueTasks( mainBLOCK_Q_PRIORITY );
 	vCreateBlockTimeTasks();
 	vStartSemaphoreTasks( mainSEM_TEST_PRIORITY );
 	vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );
 	vStartIntegerMathTasks( mainINTEGER_TASK_PRIORITY );
-	vStartGenericQueueTasks( mainGEN_QUEUE_TASK_PRIORITY );
+	vStartGenericQueueTasks( mainGEN_QUEUE_TASK_PRIORITY );*/
 
 	//vStartLEDFlashTasks( mainFLASH_TASK_PRIORITY );
 
-	vStartQueuePeekTasks();
+	/*vStartQueuePeekTasks();
 	vStartRecursiveMutexTasks();
 	vStartInterruptQueueTasks();
 	vStartMathTasks( mainFLOP_TASK_PRIORITY );
-
+*/
 	/* The suicide tasks must be created last as they need to know how many
 	tasks were running prior to their creation in order to ascertain whether
 	or not the correct/expected number of tasks are running at any given time. */

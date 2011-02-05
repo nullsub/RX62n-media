@@ -14,6 +14,7 @@
 #ifndef INTHANDLER_H
 #define INTHANDLER_H
 
+
 // Exception(Supervisor Instruction)
 void INT_Excep_SuperVisorInst(void) __attribute__ ((interrupt));
 
@@ -174,7 +175,7 @@ void INT_Excep_IRQ11(void) __attribute__ ((interrupt));
 void INT_Excep_IRQ12(void) __attribute__ ((interrupt));
 
 // IRQ13
-
+#pragma interrupt (INT_Excep_IRQ13(vect=77))
 void INT_Excep_IRQ13(void) __attribute__ ((interrupt));
 
 // IRQ14
@@ -381,6 +382,8 @@ void INT_Excep_TPU7_TGI7B(void) __attribute__ ((interrupt));
 // TPU7_TCI7V
 
 void INT_Excep_TPU7_TCI7V(void) __attribute__ ((interrupt));
+
+
 
 // TPU7_TCI7U
 

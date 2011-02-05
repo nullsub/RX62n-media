@@ -6,12 +6,15 @@
 #define LCD_SET_DATA_MODE        PORT5.DR.BIT.B1 = 1
 // we need to assert the chip select line before sending any data to the LCD
 #define LCD_CHIP_SELECT_SET      PORTC.DR.BIT.B2 = 0
-#define LCD_CHIP_SELECT_CLR      PORTC.DR.BIT.B2 = 1
+				 
+#define LCD_CHIP_SELECT_CLR      PORTC.DR.BIT.B2 = 1 
 
 void lcd_open()
 {
     int i = 0 ;
-    
+    /* De-Assert the CS for spi device - WIFI */
+    PORTC.DR.BIT.B1 = 1 ;
+
     PORTC.DDR.BIT.B3 = 1 ;   // LCD GPIO for Reset LCD
     PORT5.DDR.BIT.B1 = 1 ;   // LCD RS A0
 
@@ -67,7 +70,6 @@ void lcd_open()
 
     lcd_command(LCD_COMMAND_PAGE_ZERO);
     lcd_command(0x8 | 0x4);
-
 }
 
 void lcd_set_x(uint8_t xx)

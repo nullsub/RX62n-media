@@ -2691,6 +2691,7 @@ struct st_mtu1 {
             unsigned char CCLR:3;
         } BIT;
     } TCR;
+
     union {
         unsigned char BYTE;
         struct {
@@ -5493,6 +5494,7 @@ struct st_usb0 {
         struct {
             unsigned short PIPE0BRDYE:1;
             unsigned short PIPE1BRDYE:1;
+
             unsigned short PIPE2BRDYE:1;
             unsigned short PIPE3BRDYE:1;
             unsigned short PIPE4BRDYE:1;
@@ -5768,6 +5770,7 @@ struct st_usb0 {
             unsigned short SQMON:1;
             unsigned short SQSET:1;
             unsigned short SQCLR:1;
+
             unsigned short ACLRM:1;
             unsigned short ATREPM:1;
             unsigned short :3;
@@ -13784,6 +13787,7 @@ IPR_SCI6_=0x86
 #define	IEN_MTU3_TGIB3		IEN2
 #define	IEN_MTU3_TGIC3		IEN3
 #define	IEN_MTU3_TGID3		IEN4
+
 #define	IEN_MTU3_TCIV3		IEN5
 #define	IEN_MTU4_TGIA4		IEN6
 #define	IEN_MTU4_TGIB4		IEN7
@@ -14209,3 +14213,5 @@ IPR_SCI6_=0x86
 #endif /*endian*/
 
 #endif /*IODEFINE_H*/
+
+

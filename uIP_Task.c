@@ -111,6 +111,8 @@ clock_time_t clock_time( void )
 
 void vuIP_Task( void *pvParameters )
 {
+#if 0
+
 portBASE_TYPE i, xDoneSomething;
 uip_ipaddr_t xIPAddr;
 struct timer periodic_timer, arp_timer;
@@ -218,6 +220,7 @@ struct timer periodic_timer, arp_timer;
 			xSemaphoreTake( xEMACSemaphore, configTICK_RATE_HZ / 20 );
 		}
 	}
+#endif
 }
 /*-----------------------------------------------------------*/
 

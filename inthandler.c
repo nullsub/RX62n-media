@@ -13,6 +13,10 @@
 
 
 #include "inthandler.h"
+#include "iodefine.h"
+#pragma section IntPRG
+
+extern void debug(char *);
 
 // Exception(Supervisor Instruction)
 void INT_Excep_SuperVisorInst(void){/* brk(); */}
@@ -93,7 +97,12 @@ void INT_Excep_IRQ11(void){ }
 void INT_Excep_IRQ12(void){ }
 
 // IRQ13
-void INT_Excep_IRQ13(void){ }
+
+void INT_Excep_IRQ13(void){
+	debug("im INT");
+	rsi_external_inerrupt_handler();
+	ICU.IER[9].BIT.IEN5 = 0;
+}
 
 // IRQ14
 void INT_Excep_IRQ14(void){ }

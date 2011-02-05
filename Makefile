@@ -6,17 +6,27 @@ CFLAGS = \
 	-I telnetd \
 	-I ethernet \
 	-I board_hw \
+	-I board_hw/wifi_driver \
 	-I ethernet/FreeTCPIP \
 	-I ethernet/FreeTCPIP/net \
 	-I FreeRTOS/include \
 	-I FreeRTOS/portable/GCC/RX600 \
 	-I FreeRTOS \
 	-I ethernet/FreeTCPIP/sys \
-	-DINCLUDE_HIGH_FREQUENCY_TIMER_TEST=1 \
+	-DINCLUDE_HIGH_FREQUENCY_TIMER_TEST=0 \
 	$(END)
 
 
 CFILES_ENET = \
+	board_hw/net.c \
+	board_hw/wifi_driver/network_config.c \
+	board_hw/wifi_driver/process_data.c \
+	board_hw/wifi_driver/rs22_spi_bus.c \
+	board_hw/wifi_driver/rs22_spi_pine.c \
+	board_hw/wifi_driver/rs22_ssp_hcd.c \
+	board_hw/wifi_driver/rsi_spi.c \
+	board_hw/wifi_driver/rsi_util.c \
+	board_hw/spi_driver.c \
 	ethernet/memb.c \
 	telnetd/telnetd.c \
 	telnetd/shell.c \

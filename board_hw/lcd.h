@@ -9,6 +9,15 @@
 #define LCD_COMMAND_PAGE_THREE   0x2B
  
 
+#define LCD_LINE0 0
+#define LCD_LINE1 1
+#define LCD_LINE2 2
+#define LCD_LINE3 3
+#define LCD_LINE4 4
+#define LCD_LINE5 5
+#define LCD_LINE6 6
+#define LCD_LINE7 7
+
 const uint8_t * const Fontx5x7_table[256];
 
 void lcd_open();
