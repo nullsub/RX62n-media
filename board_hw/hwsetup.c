@@ -109,22 +109,6 @@ void HardwareSetup(void)
 	PORTB.ICR.BIT.B3 = 1;       // RMII_RX_ER
 	PORTB.ICR.BIT.B7 = 1;       // RMII_CRS_DV
 
- BSC.CS0MOD.WORD = 0x1234;
-// BSC.CS7CNT.WORD = 0x5678;
-  
- SCI0.SCR.BIT.TE  = 0;
- SCI0.SCR.BIT.RE  = 0;
- SCI0.SCR.BIT.TE  = 1;
- SCI2.SSR.BIT.PER = 0;
-
- TMR0.TCR.BYTE = 0x12;
- TMR1.TCR.BYTE = 0x12;
- TMR2.TCR.BYTE = 0x12;
- 
-	PORT0.DDR.BYTE = 0x12;
- PORT1.DDR.BYTE = 0x12;
-
-
 	/* Configure LEDs */
 	LED4 = LED_OFF;
 	LED5 = LED_OFF;

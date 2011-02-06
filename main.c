@@ -149,27 +149,15 @@
 #define mainSEM_TEST_PRIORITY		( tskIDLE_PRIORITY + 1 )
 #define mainBLOCK_Q_PRIORITY		( tskIDLE_PRIORITY + 2 )
 #define mainCREATOR_TASK_PRIORITY   ( tskIDLE_PRIORITY + 3 )
-#define WIFI_DRIVER_TASK_PRIORITY		( tskIDLE_PRIORITY + 2 )
+#define WIFI_DRIVER_TASK_PRIORITY		( tskIDLE_PRIORITY)
 #define mainINTEGER_TASK_PRIORITY   ( tskIDLE_PRIORITY )
 #define mainGEN_QUEUE_TASK_PRIORITY	( tskIDLE_PRIORITY )
 #define mainFLOP_TASK_PRIORITY		( tskIDLE_PRIORITY )
 
 #define tempature_TASK_PRIORITY		( tskIDLE_PRIORITY )
 
-/* The WEB server uses string handling functions, which in turn use a bit more
-stack than most of the other tasks. */
-#define WIFI_DRIVER_STACK_SIZE			( configMINIMAL_STACK_SIZE * 3 )
-
-
-/* The rate at which mainCHECK_LED will toggle when all the tasks are running
-without error.  Controlled by the check task as described at the top of this
-file. */
-#define mainNO_ERROR_CYCLE_TIME		( 5000 / portTICK_RATE_MS )
-
-/* The rate at which mainCHECK_LED will toggle when an error has been reported
-by at least one task.  Controlled by the check task as described at the top of
-this file. */
-#define mainERROR_CYCLE_TIME		( 200 / portTICK_RATE_MS )
+// I dont know how much it needs!
+#define WIFI_DRIVER_STACK_SIZE			(configMINIMAL_STACK_SIZE*12)
 
 
 /*
@@ -204,13 +192,6 @@ void vApplicationIdleHook( void );
  */
 void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName );
 
-/*
- * Contains the implementation of the WEB server.
- */
-extern void wifi_driver_task( void *pvParameters );
-
-
-extern void tempature_task(void *pvParameters);
 
 /*-----------------------------------------------------------*/
 
@@ -227,42 +208,41 @@ static const char *pcStatusMessage = NULL;
 
 /*-----------------------------------------------------------*/
 
+extern void HardwareSetup( void );
+extern void wifi_driver_task( void *pvParameters );
+void tempature_task(void *pvParameters);
+extern void debug(char *str);
+
 int main(void)
 {
-extern void HardwareSetup( void );
-
-	/* Renesas provided CPU configuration routine.  The clocks are configured in
-	here. */
 	HardwareSetup();
 
 	lcd_open();
-
 	lcd_set_address(0, 0);
-
 	lcd_string(LCD_LINE0,0, "   Welcome");
 
 	
-	/* The ethernet task. */
-	xTaskCreate( wifi_driver_task , ( signed char * ) "wifi_driver", WIFI_DRIVER_STACK_SIZE , NULL, WIFI_DRIVER_TASK_PRIORITY, NULL );
-
-	//xTaskCreate( tempature_task, ( signed char * ) "tempature", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
+	// Application Tasks
+	xTaskCreate( wifi_driver_task, ( signed char * ) "wifi_driver", WIFI_DRIVER_STACK_SIZE , NULL, WIFI_DRIVER_TASK_PRIORITY, NULL );
+	xTaskCreate( tempature_task, ( signed char * ) "tempature", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY, NULL );
+	//xTaskCreate( tempature_task, ( signed char * ) "speech-recognition", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
+	//xTaskCreate( mic_task, ( signed char * ) "audio-analysis", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
+	//xTaskCreate( tempature_task, ( signed char * ) "led_matrix", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 
 
 	/* Create the standard demo tasks. */
-	/*vStartBlockingQueueTasks( mainBLOCK_Q_PRIORITY );
+	vStartBlockingQueueTasks( mainBLOCK_Q_PRIORITY );
 	vCreateBlockTimeTasks();
 	vStartSemaphoreTasks( mainSEM_TEST_PRIORITY );
 	vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );
 	vStartIntegerMathTasks( mainINTEGER_TASK_PRIORITY );
-	vStartGenericQueueTasks( mainGEN_QUEUE_TASK_PRIORITY );*/
+	vStartGenericQueueTasks( mainGEN_QUEUE_TASK_PRIORITY );
 
-	//vStartLEDFlashTasks( mainFLASH_TASK_PRIORITY );
-
-	/*vStartQueuePeekTasks();
+	vStartQueuePeekTasks();
 	vStartRecursiveMutexTasks();
 	vStartInterruptQueueTasks();
 	vStartMathTasks( mainFLOP_TASK_PRIORITY );
-*/
+
 	/* The suicide tasks must be created last as they need to know how many
 	tasks were running prior to their creation in order to ascertain whether
 	or not the correct/expected number of tasks are running at any given time. */
@@ -312,6 +292,7 @@ void vApplicationSetupTimerInterrupt( void )
 of this file. */
 void vApplicationMallocFailedHook( void )
 {
+	debug(" MallocFailed!");
 	for( ;; );
 }
 /*-----------------------------------------------------------*/
@@ -320,6 +301,7 @@ void vApplicationMallocFailedHook( void )
 of this file. */
 void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName )
 {
+	debug("overflow");
 	for( ;; );
 }
 /*-----------------------------------------------------------*/
@@ -343,11 +325,14 @@ char *pcGetTaskStatusMessage( void )
 	the task priorities the pointer could change it will be atomic if not near
 	atomic and its not critical. */
 	if( pcStatusMessage == NULL )
+		
 	{
+		debug("no errorr");
 		return "All tasks running without error";
 	}
 	else
 	{
+		debug("errorr");
 		return ( char * ) pcStatusMessage;
 	}
 }
@@ -365,6 +350,7 @@ extern void tempature_task(void *pvParameters){
      {
          // Wait for the next cycle.
          vTaskDelayUntil( &xLastWakeTime, xFrequency );
+	//debug("temperature");
 
          // Perform action here.
      }

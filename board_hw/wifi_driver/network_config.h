@@ -26,7 +26,7 @@ Ver   By               date        Description
 
 #include "includes.h"
 
-#define   AUTO_CONNECT_OPEN_AP	ENABLE				/* ENABLE / DISABLE */
+#define   AUTO_CONNECT_OPEN_AP	DISABLE				/* ENABLE / DISABLE */
 
 #define   SCAN_CHANNEL			0					/* 0 -> Auto */
 #define   IBSS_CHANNEL			4					/* Channel in which the IBSS Network is created */

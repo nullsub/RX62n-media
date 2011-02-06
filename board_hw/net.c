@@ -55,14 +55,16 @@ void wifi_driver_task( void *pvParameters )
   volatile int32_t  val = 0;   
 
   debug ("start");
+ENABLE_LEDS;
+	ALL_LEDS_OFF;
 	
    if((rsi_poweron_device()) == RSI_STATUS_FAILURE)
    {
-	  //Glyph_init(); init display?!
-	  displayInfo(SPI_INIT_FAILED);   
+	  displayInfo(SPI_INIT_FAILED); 
+		vTaskSuspend(NULL); // lets suspend ourself
 	  while(1);	   
    }
-    //Glyph_init(); init display?!
+    
    	/* After Data Flash Area is enabled, you can access Data Flash Memory */
    if( FIRMWARE_UPGRADE == ENABLE )
    {

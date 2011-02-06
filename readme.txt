@@ -1,9 +1,9 @@
 ---------------------------------------------------------------------------------
 This is based upon the FreeRTOS demo, stripped down and improved by Zizzle - mattpratt.au@gmail.com
 ---------------------------------------------------------------------------------
-sadasdsada
-The Wifi Board arrived. Now I try to port the SPI driver from the examples to FreeRTOS.
-sadadsa
+
+Current State:
+	I ported the wifi demo code but it doesnt work. I dont know where to find the bug.
 
 Need to add following things:
 	-clock
