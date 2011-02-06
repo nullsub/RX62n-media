@@ -12,6 +12,7 @@
 void lcd_open()
 {
     int i = 0 ;
+
     /* De-Assert the CS for spi device - WIFI */
     PORTC.DR.BIT.B1 = 1 ;
 
