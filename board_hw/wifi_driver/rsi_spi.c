@@ -40,7 +40,7 @@ Sl  By           date        change     details
 #include "rsi_nic.h"
 #include "rsi_spi.h"
 #include "rsi_api.h"
-#include "leds.h"
+#include "board.h"
 #include "process_data.h"
 #include "rsi_util.h"
 #include "network_config.h"

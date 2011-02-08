@@ -13,12 +13,14 @@ CFLAGS = \
 	-I FreeRTOS/portable/GCC/RX600 \
 	-I FreeRTOS \
 	-I ethernet/FreeTCPIP/sys \
-	-DINCLUDE_HIGH_FREQUENCY_TIMER_TEST=0 \
 	$(END)
 
 
 CFILES_ENET = \
+	board_hw/temp_board.c \
 	board_hw/net.c \
+	board_hw/i2c.c \
+	board_hw/accelerometer.c \
 	board_hw/wifi_driver/network_config.c \
 	board_hw/wifi_driver/process_data.c \
 	board_hw/wifi_driver/rs22_spi_bus.c \

@@ -37,7 +37,7 @@
 /******************************************************************************
 Includes “Glyph config Include”
 ******************************************************************************/
-#include "types.h"
+#include <stdint.h>
 
 const uint8_t Fontx5x7_char_0[] = {
     0x05, 0x07, // width=5, height=7
@@ -759,6 +759,7 @@ const uint8_t * const Fontx5x7_table[256] = {
     Fontx5x7_char_78,
     Fontx5x7_char_79,
     Fontx5x7_char_80,
+
     Fontx5x7_char_81,
     Fontx5x7_char_82,
     Fontx5x7_char_83,

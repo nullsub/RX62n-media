@@ -142,6 +142,7 @@
 #include "flop.h"
 
 #include "lcd.h"
+#include "temp_board.h"
 
 
 /* Priorities at which the tasks are created. */
@@ -220,6 +221,11 @@ int main(void)
 	lcd_open();
 	lcd_set_address(0, 0);
 	lcd_string(LCD_LINE0,0, "   Welcome");
+
+	i2c_init();
+	temp_init(); //tempature sensor
+	accel_init(); //accelerometer
+	accel_calibrate_zero();
 
 	
 	// Application Tasks
@@ -341,7 +347,9 @@ char *pcGetTaskStatusMessage( void )
 extern void tempature_task(void *pvParameters){
 	 portTickType xLastWakeTime;
 	// update every 60 seconds
- 	const portTickType xFrequency = 60000/portTICK_RATE_MS;
+ 	const portTickType xFrequency = 10000/portTICK_RATE_MS;
+	
+	lcd_string(LCD_LINE2, 0, "Doing TASK X");
 
      // Initialise the xLastWakeTime variable with the current time.
      xLastWakeTime = xTaskGetTickCount();
@@ -350,7 +358,18 @@ extern void tempature_task(void *pvParameters){
      {
          // Wait for the next cycle.
          vTaskDelayUntil( &xLastWakeTime, xFrequency );
-	//debug("temperature");
+
+	uint16_t x = accel_get_x();
+	uint16_t y = accel_get_y();
+	uint16_t z = accel_get_z();
+	lcd_string(LCD_LINE2, 0, "X = ");
+	lcd_display_number((int)x);
+	lcd_string(LCD_LINE3, 0, "Y = ");
+	lcd_display_number((int)y);
+	lcd_string(LCD_LINE4, 0, "Z = ");
+	lcd_display_number((int)y);
+
+	temp_read(); // get the temperature
 
          // Perform action here.
      }

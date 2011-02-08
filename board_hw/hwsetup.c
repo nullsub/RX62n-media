@@ -40,7 +40,7 @@
 Includes   <System Includes> , "Project Includes"
 ******************************************************************************/
 #include "iodefine.h"
-#include "yrdkrx62ndef.h"
+#include "board.h"
 // #include "lcd.h" Uncomment this if an LCD is present.
 
 /******************************************************************************
@@ -110,31 +110,8 @@ void HardwareSetup(void)
 	PORTB.ICR.BIT.B7 = 1;       // RMII_CRS_DV
 
 	/* Configure LEDs */
-	LED4 = LED_OFF;
-	LED5 = LED_OFF;
-	LED6 = LED_OFF;
-	LED7 = LED_OFF;
-	LED8 = LED_OFF;
-	LED9 = LED_OFF;
-	LED10 = LED_OFF;
-	LED11 = LED_OFF;
-	LED12 = LED_OFF;
-	LED13 = LED_OFF;
-	LED14 = LED_OFF;
-	LED15 = LED_OFF;
-
-	LED4_DDR = 1;
-	LED5_DDR = 1;
-	LED6_DDR = 1;
-	LED7_DDR = 1;
-	LED8_DDR = 1;
-	LED9_DDR = 1;
-	LED10_DDR = 1;
-	LED11_DDR = 1;
-	LED12_DDR = 1;
-	LED13_DDR = 1;
-	LED14_DDR = 1;
-	LED15_DDR = 1;
+	ALL_LEDS_OFF
+	ENABLE_LEDS
 
 	/* Configure push button switches */
 	SW1_DDR = 0;
@@ -146,6 +123,7 @@ void HardwareSetup(void)
 
 		/* De-Assert the CS for spi device - WIFI */
     PORTC.DR.BIT.B1 = 1 ;	
+
 }
 
 

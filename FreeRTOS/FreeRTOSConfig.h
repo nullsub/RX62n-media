@@ -55,7 +55,7 @@
 #define FREERTOS_CONFIG_H
 
 /* Board specifics. */
-#include "yrdkrx62ndef.h"
+#include "board.h"
 
 /*-----------------------------------------------------------
  * Application specific definitions.

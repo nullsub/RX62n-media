@@ -27,7 +27,7 @@ Ver   By               date        Description
 #include "rsi_util.h"
 #include "iodefine.h"
 #include "string.h"
-#include "leds.h"
+#include "board.h"
 #include "network_config.h"
 #include "rsi_nic.h"
 
@@ -238,36 +238,63 @@ uint16_t rs22_aToi(uint8_t *src, uint8_t src_len)
 
 uint16_t rsi_convert_ip_to_string(uint8_t *num_buff, uint8_t *ip_buff)
 {
- 	uint8_t temp_buf[8];
-	uint8_t temp_buf2[8];
-	uint16_t temp;
-	uint16_t num_index = 0, ip_index = 0;
-	uint16_t temp_index = 0, temp_index2 = 0;
-    
-    
-	memset(ip_buff, 0, 17);
-	while (num_index < 4)
-	{
-		temp = num_buff[num_index++];
-		
+ 	uint8_t temp_buf[8];
+
+	uint8_t temp_buf2[8];
+
+	uint16_t temp;
+
+	uint16_t num_index = 0, ip_index = 0;
+
+	uint16_t temp_index = 0, temp_index2 = 0;
+
+    
+
+    
+
+	memset(ip_buff, 0, 17);
+
+	while (num_index < 4)
+
+	{
+
+		temp = num_buff[num_index++];
+
+		
+
 
 		do
 		{
-			temp_buf[temp_index++] = (temp%10) + '0';
-			temp = temp/10;
-			ip_index++;
+			temp_buf[temp_index++] = (temp%10) + '0';
+
+			temp = temp/10;
+
+			ip_index++;
+
 		}while(temp);
-		rsi_strrev(temp_buf, temp_buf2, temp_index);
-	    rsi_strcat(temp_buf2, ip_buff + temp_index2, temp_index);
-		
-		temp_index = 0;
-        if (num_index < 4)
-           ip_buff[ip_index++] = '.';
-		   temp_index2 = ip_index;
-		   
-	}
-	
-	return ip_index;
+		rsi_strrev(temp_buf, temp_buf2, temp_index);
+
+	    rsi_strcat(temp_buf2, ip_buff + temp_index2, temp_index);
+
+
+		
+
+		temp_index = 0;
+
+        if (num_index < 4)
+
+           ip_buff[ip_index++] = '.';
+
+		   temp_index2 = ip_index;
+
+		   
+
+	}
+
+	
+
+	return ip_index;
+
 }
 
 uint8_t rsi_strrev(void *src, void *dst, uint8_t len)
@@ -285,14 +312,24 @@ uint8_t rsi_strrev(void *src, void *dst, uint8_t len)
    return 0;
 }
 
-void rsi_strcat(void *src, void *dst, uint8_t len)
-{
-   uint8_t *dst1;
-   uint8_t *src1;
-   dst1 = dst;
-   src1 = src;
-  
-   while(len-- != 0)
-    *dst1++ = *src1++;
-	
+void rsi_strcat(void *src, void *dst, uint8_t len)
+
+{
+
+   uint8_t *dst1;
+
+   uint8_t *src1;
+
+   dst1 = dst;
+
+   src1 = src;
+
+  
+
+   while(len-- != 0)
+
+    *dst1++ = *src1++;
+
+	
+
 }

@@ -23,7 +23,7 @@ extern void hw_initialise(void);
 void hw_initialise(void)
 {
 
- BSC.CS0MOD.WORD = 0x1234;
+ /*BSC.CS0MOD.WORD = 0x1234;
  BSC.CS7CR.WORD = 0x5678;
   
  SCI0.SCR.BIT.TE  = 0;
@@ -38,7 +38,7 @@ void hw_initialise(void)
 	PORT0.DDR.BYTE = 0x12;
  PORT1.DDR.BYTE = 0x12;
 
-/*  SCI0.SMR.BYTE = 0;
+  SCI0.SMR.BYTE = 0;
  // SCI1.SMR.BIT.CA   = 1;
   SCI1.SMR.BIT.CHR  = 1;
   //SCI0.SMR.BIT.OE   = 1;

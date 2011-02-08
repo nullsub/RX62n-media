@@ -2,7 +2,7 @@
 /* Header file includes */
 #include "includes.h"
 #include "rsi_spi.h"
-#include "leds.h"
+#include "board.h"
 #include "process_data.h"
 #include "rsi_util.h"
 #include "rsi_nic.h"

@@ -1,7 +1,7 @@
 #ifndef __LCD_H
 #define __LCD_H
 
-#include "types.h"
+#include <stdint.h>
 
 #define LCD_COMMAND_PAGE_ZERO    0x28
 #define LCD_COMMAND_PAGE_ONE     0x29
