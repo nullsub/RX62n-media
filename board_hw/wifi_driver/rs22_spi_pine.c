@@ -593,6 +593,7 @@ rs22_send_data_frame
 {
   RS22_STATUS status = RS22_STATUS_SUCCESS;
   /* Add the queue number in the frame descriptor */
+
   ((uint8_t *)frame)[14] = SND_DATA_Q;
   /* Send the 16 byte frame descriptor */
   status = rs22_card_write(frame,

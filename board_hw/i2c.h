@@ -19,22 +19,10 @@
 #ifndef  BSP_H_
 #define  BSP_H_
 
-/*
-*********************************************************************************************************
-*                                               DEFINES
-*********************************************************************************************************
-*/
+#include "stdint.h"
+#include <stdbool.h>
+ 
 
-#define  BSP_CPU_EXT_CLK_FREQ    12000000uL
-
-/*
-*********************************************************************************************************
-*                                         FUNCTION PROTOTYPES
-*********************************************************************************************************
-*/
-
-void        BSP_Init          (void);
-CPU_INT32U  BSP_CPU_PerClkFreq(void);
 
 /*
 *********************************************************************************************************
@@ -42,24 +30,9 @@ CPU_INT32U  BSP_CPU_PerClkFreq(void);
 *********************************************************************************************************
 */
 
-void        BSP_RIIC0_Init    (void);
-void        BSP_RIIC0_MasterRd(CPU_INT08U   addr,
-                               CPU_INT08U  *p_data,
-                               CPU_SIZE_T   len,
-                               CPU_BOOLEAN  start);
-void        BSP_RIIC0_MasterWr(CPU_INT08U   addr,
-                               CPU_INT08U  *p_data,
-                               CPU_SIZE_T   len,
-                               CPU_BOOLEAN  stop);
+void        i2c_init(void);
+void        BSP_RIIC0_MasterRd(uint8_t   addr, uint8_t  *p_data, uint32_t   len, bool  start);
+void        BSP_RIIC0_MasterWr(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  stop);
 
-/*
-*********************************************************************************************************
-*                                            LED SERVICES
-*********************************************************************************************************
-*/
-
-void        LED_On            (CPU_INT08U  led);
-void        LED_Off           (CPU_INT08U  led);
-void        LED_Toggle        (CPU_INT08U  led);
 
 #endif

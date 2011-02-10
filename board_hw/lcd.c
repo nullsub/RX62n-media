@@ -20,9 +20,9 @@ void lcd_open()
     PORT5.DDR.BIT.B1 = 1 ;   // LCD RS A0
 
     PORTC.DR.BIT.B3 = 1 ;    // Reset LCD
-    for (i=0;i<1000000;i++)asm("");
+    for (i=0;i<1000000;i++)__asm("nop");
     PORTC.DR.BIT.B3 = 0 ;    // clear LCD reset line
-    for (i=0;i<1000000;i++)asm("");
+    for (i=0;i<1000000;i++)__asm("nop");
 
     MSTP(RSPI0) = 0 ;             // enable module
     IOPORT.PFGSPI.BIT.RSPIS  = 0; // Select proper bank of pins for SPI0 

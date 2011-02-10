@@ -1,7 +1,6 @@
-#include "bsp_adt7420.h"
-#include "cpu.h"
-#include "bsp.h"
-#include "lib_def.h"
+#include "temp_board.h"
+
+#include "i2c.h"
 
 /*
 *********************************************************************************************************
@@ -9,14 +8,14 @@
 *********************************************************************************************************
 */
 
-void  BSP_Temp_Init (void)
+void  temp_init (void)
 {
-    CPU_INT08U  temp_data[2];
+    uint8_t temp_data[2];
     
     
     temp_data[0] = BSP_TEMP_CFG;                      /* configure temperature sensor                   */
     temp_data[1] = 0x00;
-    BSP_RIIC0_MasterWr(BSP_TEMP_ADDR, &temp_data[0], 2, DEF_TRUE);
+    BSP_RIIC0_MasterWr(BSP_TEMP_ADDR, &temp_data[0], 2, true);
 }
 
 
@@ -26,22 +25,22 @@ void  BSP_Temp_Init (void)
 *********************************************************************************************************
 */
 
-CPU_FP32  BSP_Temp_Rd (void)
+float  temp_read(void)
 {
-    CPU_INT08U  temp_data[2];
-    CPU_INT16U  temp;
-    CPU_FP32    val;
+    uint8_t  temp_data[2];
+    uint16_t  temp;
+    float    val;
       
 
     temp_data[0] = BSP_TEMP_REG;
-    BSP_RIIC0_MasterWr(BSP_TEMP_ADDR, &temp_data[0], 1, DEF_FALSE);
+    BSP_RIIC0_MasterWr(BSP_TEMP_ADDR, &temp_data[0], 1, false);
 
-    BSP_RIIC0_MasterRd(BSP_TEMP_ADDR, &temp_data[0], 2, DEF_FALSE);
+    BSP_RIIC0_MasterRd(BSP_TEMP_ADDR, &temp_data[0], 2, false);
     temp  = temp_data[0] << 8;
     temp += temp_data[1];
     temp  = temp >> 3;
 
-    val   = (CPU_FP32)temp * 0.0625f;
+    val   = (float)temp * 0.0625f;
 
-    return (val);
+    return val;
 }

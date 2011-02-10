@@ -1,12 +1,10 @@
-#include "cpu.h"
-#include "bsp.h"
-#include "bsp_adxl345.h"
-#include "lib_def.h"
+#include "i2c.h"
+#include "accelerometer.h"
 
 
-volatile CPU_INT16S BSP_Accel_X_Zero;
-volatile CPU_INT16S BSP_Accel_Y_Zero;
-volatile CPU_INT16S BSP_Accel_Z_Zero;
+volatile int16_t BSP_Accel_X_Zero;
+volatile int16_t BSP_Accel_Y_Zero;
+volatile int16_t BSP_Accel_Z_Zero;
 
 
 /*
@@ -15,25 +13,24 @@ volatile CPU_INT16S BSP_Accel_Z_Zero;
 *********************************************************************************************************
 */
 
-void  BSP_Accel_Init (void)
+void  accel_init (void)
 {
-    CPU_INT08U  accel_data[2];
-
+    uint8_t  accel_data[2];
 
                                                                   /* accelerometer data format                     */
                                                                   /* range +/- 16g                                 */
                                                                   /* right justified with sign extension           */
     accel_data[0] = DATA_FORMAT_REG;                              /* Full resolution mode                          */
     accel_data[1] = 0x0B;
-    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 2, DEF_TRUE);
+    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 2, true);
     
     accel_data[0] = POWER_CTRL;                                   /* take accelerometer out of standby mode        */
     accel_data[1] = 0x08;
-    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 2, DEF_TRUE);
+    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 2, true);
     
     accel_data[0] = FIFO_CTRL;                                    /* put FIFO into bypass mode                     */
     accel_data[1] = 0x00;
-    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 2, DEF_TRUE);
+    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 2, true);
 }
 
 
@@ -43,20 +40,20 @@ void  BSP_Accel_Init (void)
 *********************************************************************************************************
 */
 
-CPU_INT16S  BSP_Accel_X_AxisRd (void)
+int16_t  accel_get_x(void)
 {
-    CPU_INT08U  accel_data[2];
-    CPU_INT16U  x_axis_val;
+    uint8_t  accel_data[2];
+    uint16_t  x_axis_val;
 
     
     accel_data[0] = DATAX0;
-    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 1, DEF_TRUE);
-    BSP_RIIC0_MasterRd(ACCEL_ADDR, accel_data, 2, DEF_TRUE);
+    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 1, true);
+    BSP_RIIC0_MasterRd(ACCEL_ADDR, accel_data, 2, true);
     
     x_axis_val    = accel_data[1] << 8;
     x_axis_val   += accel_data[0];
 
-    return ((CPU_INT16S)x_axis_val);
+    return x_axis_val;
 }
 
 
@@ -66,20 +63,20 @@ CPU_INT16S  BSP_Accel_X_AxisRd (void)
 *********************************************************************************************************
 */
 
-CPU_INT16S  BSP_Accel_Y_AxisRd (void)
+int16_t accel_get_y(void)
 {
-    CPU_INT08U  accel_data[2];
-    CPU_INT16U  y_axis_val;
+    uint8_t  accel_data[2];
+    uint16_t  y_axis_val;
 
     
     accel_data[0] = DATAY0;
-    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 1, DEF_TRUE);
-    BSP_RIIC0_MasterRd(ACCEL_ADDR, accel_data, 2, DEF_TRUE);
+    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 1, true);
+    BSP_RIIC0_MasterRd(ACCEL_ADDR, accel_data, 2, true);
     
     y_axis_val    = accel_data[1] << 8;
     y_axis_val   += accel_data[0];
 
-    return ((CPU_INT16S)y_axis_val);
+    return y_axis_val;
 }
 
 
@@ -89,20 +86,20 @@ CPU_INT16S  BSP_Accel_Y_AxisRd (void)
 *********************************************************************************************************
 */
 
-CPU_INT16S  BSP_Accel_Z_AxisRd (void)
+int16_t  accel_get_z (void)
 {
-    CPU_INT08U  accel_data[2];
-    CPU_INT16U  z_axis_val;
+    uint8_t  accel_data[2];
+    uint16_t  z_axis_val;
 
     
     accel_data[0] = DATAZ0;
-    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 1, DEF_TRUE);
-    BSP_RIIC0_MasterRd(ACCEL_ADDR, accel_data, 2, DEF_TRUE);
+    BSP_RIIC0_MasterWr(ACCEL_ADDR, accel_data, 1, true);
+    BSP_RIIC0_MasterRd(ACCEL_ADDR, accel_data, 2, true);
     
     z_axis_val    = accel_data[1] << 8;
     z_axis_val   += accel_data[0];
 
-    return ((CPU_INT16S)z_axis_val);
+    return z_axis_val;
 }
 
 
@@ -112,9 +109,9 @@ CPU_INT16S  BSP_Accel_Z_AxisRd (void)
 *********************************************************************************************************
 */
 
-void  BSP_Accel_ZeroCal (void)
+void  accel_calibrate_zero(void)
 {
-    CPU_INT08U  indx;
+    uint8_t  indx;
 
 
     BSP_Accel_X_Zero = 0;
@@ -122,12 +119,13 @@ void  BSP_Accel_ZeroCal (void)
     BSP_Accel_Z_Zero = 0;
     
     for (indx = 0; indx < 8; indx++) {
-        BSP_Accel_X_Zero += BSP_Accel_X_AxisRd();
-        BSP_Accel_Y_Zero += BSP_Accel_Y_AxisRd();
-        BSP_Accel_Z_Zero += BSP_Accel_Z_AxisRd();
+        BSP_Accel_X_Zero += accel_get_x();
+        BSP_Accel_Y_Zero += accel_get_y();
+        BSP_Accel_Z_Zero += accel_get_z();
     }
     
     BSP_Accel_X_Zero = BSP_Accel_X_Zero / 8;
     BSP_Accel_Y_Zero = BSP_Accel_Y_Zero / 8;
     BSP_Accel_Z_Zero = BSP_Accel_Z_Zero / 8;
 }
+

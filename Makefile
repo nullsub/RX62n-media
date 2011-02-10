@@ -13,6 +13,7 @@ CFLAGS = \
 	-I FreeRTOS/portable/GCC/RX600 \
 	-I FreeRTOS \
 	-I ethernet/FreeTCPIP/sys \
+	-std=c99 \
 	$(END)
 
 
