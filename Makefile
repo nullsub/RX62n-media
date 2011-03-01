@@ -20,6 +20,7 @@ CFLAGS = \
 CFILES_ENET = \
 	board_hw/temp_board.c \
 	board_hw/net.c \
+	board_hw/microphone.c \
 	board_hw/i2c.c \
 	board_hw/accelerometer.c \
 	board_hw/wifi_driver/network_config.c \
@@ -50,7 +51,6 @@ CFILES_ENET = \
 	ethernet/FreeTCPIP/timer.c \
 	ethernet/FreeTCPIP/uip.c \
 	ethernet/FreeTCPIP/uip_arp.c \
-	board_hw/hwinit.c \
 	inthandler.c \
 	HighFrequencyTimerTest.c \
 	IntQueueTimer.c \

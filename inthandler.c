@@ -16,8 +16,6 @@
 #include "iodefine.h"
 #pragma section IntPRG
 
-extern void debug(char *);
-
 // Exception(Supervisor Instruction)
 void INT_Excep_SuperVisorInst(void){/* brk(); */}
 
@@ -117,7 +115,10 @@ void INT_Excep_WDT_WOVI(void){ }
 void INT_Excep_AD0_ADI0(void){ }
 
 // AD1_ADI1
-void INT_Excep_AD1_ADI1(void){ }
+extern void Interrupt_ADC1();
+void INT_Excep_AD1_ADI1(void){ 
+	Interrupt_ADC1();
+}
 
 // AD2_ADI2
 void INT_Excep_AD2_ADI2(void){ }

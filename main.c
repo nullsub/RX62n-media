@@ -145,6 +145,7 @@
 #include "i2c.h"
 #include "temp_board.h"
 #include "accelerometer.h"
+#include "microphone.h"
 
 #include "stdio.h" 
 
@@ -202,7 +203,10 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 
 extern void HardwareSetup( void );
 extern void wifi_driver_task( void *pvParameters );
+
 void temp_accel_task(void *pvParameters);
+void microphone_task(void *pvParameters);
+
 extern void debug(char *str);
 
 int main(void)
@@ -217,11 +221,12 @@ int main(void)
 	temp_init(); //tempature sensor
 	accel_init(); //accelerometer
 	accel_calibrate_zero();
+	//adc_init();
 
-	
 	// Application Tasks
 	//xTaskCreate( wifi_driver_task, ( signed char * ) "wifi_driver", WIFI_DRIVER_STACK_SIZE , NULL, WIFI_DRIVER_TASK_PRIORITY, NULL );
-	xTaskCreate( temp_accel_task, ( signed char * ) "temp-accel", configMINIMAL_STACK_SIZE*2, NULL, tempature_TASK_PRIORITY, NULL );
+	xTaskCreate(temp_accel_task, ( signed char * ) "temp-accel", configMINIMAL_STACK_SIZE*2, NULL, tempature_TASK_PRIORITY, NULL );
+	xTaskCreate(microphone_task, ( signed char * ) "microphone", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY, NULL );
 	//xTaskCreate( mic_task, ( signed char * ) "audio-analysis", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 	//xTaskCreate( tempature_task, ( signed char * ) "led_matrix", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 
@@ -296,6 +301,16 @@ void vApplicationIdleHook( void )
 }
 /*-----------------------------------------------------------*/
 
+void microphone_task(void *pvParameters){
+	char str[20];
+	portTickType xLastWakeTime;
+ 	const portTickType xFrequency = 1000/portTICK_RATE_MS; // update every 1 seconds
+	xLastWakeTime = xTaskGetTickCount();      // Initialise the xLastWakeTime variable with the current time.
+	while(1){
+			vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.
+	}
+}
+
 
 void temp_accel_task(void *pvParameters){
 	portTickType xLastWakeTime;
@@ -318,17 +333,17 @@ void temp_accel_task(void *pvParameters){
 		y = accel_get_y();
 		z = accel_get_z();
 		
-		sprintf(str,"X = %i",(int)x);
-		lcd_string(LCD_LINE3, 0, str);	
-		sprintf(str,"Y = %i",(int)y);
+		sprintf(str,"X = %i  ",(int)x);
+		lcd_string(LCD_LINE2, 0, str);	
+		sprintf(str,"Y = %i  ",(int)y);
+		lcd_string(LCD_LINE3, 0, str);
+		sprintf(str,"Z = %i  ",(int)z);
 		lcd_string(LCD_LINE4, 0, str);
-		sprintf(str,"Z = %i",(int)z);
-		lcd_string(LCD_LINE5, 0, str);
 
 
 		temp = temp_read(); 
 		sprintf(str,"temp = %.3f",temp);
-		lcd_string(LCD_LINE7, 0, str);
+		lcd_string(LCD_LINE5, 0, str);
 
 		vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.
      }

@@ -67,7 +67,7 @@ _start:
 	sstr.b
 
 /* call the hardware initialiser */
-	bsr.a	_hw_initialise	
+	//bsr.a	_hw_initialise	
 	nop
 
 /* setup PSW */
