@@ -60,7 +60,7 @@ void  i2c_init(void)
     RIIC0.ICCR1.BIT.IICRST =  1;                 /* RIIC0 internal reset                               */
 
     for (int dly = 0; dly < 1000000; dly++) {
-        ;
+		__asm("nop");
     }
 
     RIIC0.ICCR1.BIT.IICRST =  0;                 /* cancel internal reset                              */
@@ -110,52 +110,39 @@ void  BSP_RIIC0_MasterRd(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  s
 
     if(start == true){                       /* Generate a frame with a start condition            */
                                                 
-        while (RIIC0.ICCR2.BIT.BBSY == 1) {      /* check bus is available                             */
-            ;
-        }
-    
+        while (RIIC0.ICCR2.BIT.BBSY == 1);     /* check bus is available                             */
 
         RIIC0.ICCR2.BIT.ST = 1;                  /* issue a start condition                            */
     } else {
                                                  /* Generate a frame with a re-start condition         */
-        while (RIIC0.ICCR2.BIT.BBSY == 0) {      /* check bus is busy                                  */
-            ;
-        }
+        while (RIIC0.ICCR2.BIT.BBSY == 0);      /* check bus is busy                                  */
     
 
         RIIC0.ICCR2.BIT.RS = 1;                  /* issue a re-start condition                         */
         
-        while (RIIC0.ICCR2.BIT.RS == 1) {        /* wait for completion of re-start                    */
-            ;
-        }
+        while (RIIC0.ICCR2.BIT.RS == 1);        /* wait for completion of re-start                    */
+	
     }
     
     
-    while (RIIC0.ICSR2.BIT.TDRE == 0) {          /* transmit slave address                             */
-        ;
-    }
+    while (RIIC0.ICSR2.BIT.TDRE == 0);         /* transmit slave address                             */
+
 
     RIIC0.ICDRT        = (addr << 1 ) | 0x01;
 
-    while (RIIC0.ICSR2.BIT.RDRF == 0) {          /* check ACK                                          */
-        ;
-    }
+    while (RIIC0.ICSR2.BIT.RDRF == 0);	          /* check ACK                                          */
 
     if (RIIC0.ICSR2.BIT.NACKF == 0) {
         if(len > 1) {
             dummy = RIIC0.ICDRR;                 /* ACK ok                                             */
 
-            while (RIIC0.ICSR2.BIT.RDRF == 0) {  /* read data                                          */
-                ;
-            }
+            while (RIIC0.ICSR2.BIT.RDRF == 0);	/* read data                                          */
 
             while (RxBytesLeft > 2) {
                  RxBytesLeft--;
                 *RxData = RIIC0.ICDRR;
                  RxData++;
-                 while (RIIC0.ICSR2.BIT.RDRF == 0) {
-                     ;
-                 }
+                 while (RIIC0.ICSR2.BIT.RDRF == 0);
             }
 
             RIIC0.ICMR3.BIT.WAIT  = 1;           /* enable wait, final byte - 1                        */
@@ -169,9 +156,7 @@ void  BSP_RIIC0_MasterRd(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  s
             dummy                 = RIIC0.ICDRR;
         }
             
-        while (RIIC0.ICSR2.BIT.RDRF == 0) {
-                ;
-        }
+        while (RIIC0.ICSR2.BIT.RDRF == 0);
                 
         RIIC0.ICSR2.BIT.STOP = 0;                /* read final byte and issue stop condition           */
         RIIC0.ICCR2.BIT.SP   = 1;
@@ -186,9 +171,7 @@ void  BSP_RIIC0_MasterRd(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  s
         dummy                = RIIC0.ICDRR;
     }
 
-    while (RIIC0.ICSR2.BIT.STOP == 0) {
-        ;
-    }
+    while (RIIC0.ICSR2.BIT.STOP == 0);
 
     RIIC0.ICSR2.BIT.NACKF    = 0;
 
@@ -223,15 +206,11 @@ void  BSP_RIIC0_MasterWr(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  s
 
    // BSP_OS_RIIC0_MutexPend();                    /* Request mutex, block until mutex obtained          */
 
-    while (RIIC0.ICCR2.BIT.BBSY == 1) {          /* check bus is available                             */
-        ;
-    }
+    while (RIIC0.ICCR2.BIT.BBSY == 1);         /* check bus is available                             */
 
     RIIC0.ICCR2.BIT.ST = 1;                      /* issue a start condition                            */
 
-    while (RIIC0.ICSR2.BIT.TDRE == 0) {          /* transmit slave address                             */
-        ;
-    }
+    while (RIIC0.ICSR2.BIT.TDRE == 0);          /* transmit slave address                             */
 
     RIIC0.ICDRT        = addr << 1;
 
@@ -250,18 +229,14 @@ void  BSP_RIIC0_MasterWr(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  s
     }
 
     if (TxBytesLeft == 0) {
-        while (RIIC0.ICSR2.BIT.TEND == 0) {      /* All bytes transmitted                              */
-            ;
-        }
+        while (RIIC0.ICSR2.BIT.TEND == 0);     /* All bytes transmitted                              */
     }
 
     RIIC0.ICSR2.BIT.STOP  = 0;
     if(stop == true){                       /* Send a stop condition                               */
         RIIC0.ICCR2.BIT.SP    = 1;
 
-        while (RIIC0.ICSR2.BIT.STOP == 0) {
-            ;
-        }
+        while (RIIC0.ICSR2.BIT.STOP == 0) ;
     }
 
     RIIC0.ICSR2.BIT.NACKF = 0;

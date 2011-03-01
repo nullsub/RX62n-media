@@ -179,7 +179,7 @@ void vApplicationMallocFailedHook( void );
  * vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set to 1
  * in FreeRTOSConfig.h.  It is a hook function that is called on each iteration
  * of the idle task.  It is essential that code added to this hook function
- * never attempts to block in any way (for example, call xQueueReceive() withl
+ * never attempts to block in any way (for example, call xQueueReceive() with
  * a block time specified).  If the application makes use of the vTaskDelete()
  * API function (as this demo application does) then it is also important that
  * vApplicationIdleHook() is permitted to return to its calling function because
@@ -202,7 +202,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 
 extern void HardwareSetup( void );
 extern void wifi_driver_task( void *pvParameters );
-void tempature_task(void *pvParameters);
+void temp_accel_task(void *pvParameters);
 extern void debug(char *str);
 
 int main(void)
@@ -216,13 +216,12 @@ int main(void)
 	i2c_init();
 	temp_init(); //tempature sensor
 	accel_init(); //accelerometer
-	//accel_calibrate_zero();
+	accel_calibrate_zero();
 
 	
 	// Application Tasks
 	//xTaskCreate( wifi_driver_task, ( signed char * ) "wifi_driver", WIFI_DRIVER_STACK_SIZE , NULL, WIFI_DRIVER_TASK_PRIORITY, NULL );
-	xTaskCreate( tempature_task, ( signed char * ) "tempature", configMINIMAL_STACK_SIZE*2, NULL, tempature_TASK_PRIORITY, NULL );
-	//xTaskCreate( tempature_task, ( signed char * ) "speech-recognition", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
+	xTaskCreate( temp_accel_task, ( signed char * ) "temp-accel", configMINIMAL_STACK_SIZE*2, NULL, tempature_TASK_PRIORITY, NULL );
 	//xTaskCreate( mic_task, ( signed char * ) "audio-analysis", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 	//xTaskCreate( tempature_task, ( signed char * ) "led_matrix", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 
@@ -298,7 +297,7 @@ void vApplicationIdleHook( void )
 /*-----------------------------------------------------------*/
 
 
-extern void tempature_task(void *pvParameters){
+void temp_accel_task(void *pvParameters){
 	portTickType xLastWakeTime;
 
  	const portTickType xFrequency = 1000/portTICK_RATE_MS; // update every 1 seconds
@@ -313,13 +312,12 @@ extern void tempature_task(void *pvParameters){
 
 	xLastWakeTime = xTaskGetTickCount();      // Initialise the xLastWakeTime variable with the current time.
 
-	for( ;; ){
+	for( ;; ){	
 	
-				
-	
-		/*x = accel_get_x();
+		x = accel_get_x();
 		y = accel_get_y();
-		z = accel_get_z();*/
+		z = accel_get_z();
+		
 		sprintf(str,"X = %i",(int)x);
 		lcd_string(LCD_LINE3, 0, str);	
 		sprintf(str,"Y = %i",(int)y);
@@ -333,9 +331,6 @@ extern void tempature_task(void *pvParameters){
 		lcd_string(LCD_LINE7, 0, str);
 
 		vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.
-		ALL_LEDS_ON
-		vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.
-		ALL_LEDS_OFF
      }
 }
 

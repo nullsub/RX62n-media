@@ -10,11 +10,11 @@
 #define DATAY0          0x34u
 #define DATAZ0          0x36u
 
-void            accel_init     (void);
-int16_t      accel_get_x(void);
-int16_t      accel_get_y(void);
-int16_t     accel_get_z(void);
-void            accel_calibrate_zero(void);
+void	accel_init(void);
+int16_t	accel_get_x(void);
+int16_t	accel_get_y(void);
+int16_t	accel_get_z(void);
+void	accel_calibrate_zero(void);
 
 #define ACCEL_ADDR  (0x3A >> 1)
 

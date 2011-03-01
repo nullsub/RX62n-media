@@ -2,9 +2,9 @@
 #include "accelerometer.h"
 
 
-volatile int16_t BSP_Accel_X_Zero;
-volatile int16_t BSP_Accel_Y_Zero;
-volatile int16_t BSP_Accel_Z_Zero;
+static int16_t Accel_X_Zero;
+static int16_t Accel_Y_Zero;
+static int16_t Accel_Z_Zero;
 
 
 /*
@@ -43,7 +43,7 @@ void  accel_init (void)
 int16_t  accel_get_x(void)
 {
     uint8_t  accel_data[2];
-    uint16_t  x_axis_val;
+    int16_t  x_axis_val;
 
     
     accel_data[0] = DATAX0;
@@ -52,6 +52,8 @@ int16_t  accel_get_x(void)
     
     x_axis_val    = accel_data[1] << 8;
     x_axis_val   += accel_data[0];
+
+	x_axis_val -= Accel_X_Zero;
 
     return x_axis_val;
 }
@@ -66,7 +68,7 @@ int16_t  accel_get_x(void)
 int16_t accel_get_y(void)
 {
     uint8_t  accel_data[2];
-    uint16_t  y_axis_val;
+    int16_t  y_axis_val;
 
     
     accel_data[0] = DATAY0;
@@ -75,6 +77,8 @@ int16_t accel_get_y(void)
     
     y_axis_val    = accel_data[1] << 8;
     y_axis_val   += accel_data[0];
+
+	y_axis_val -= Accel_Y_Zero;
 
     return y_axis_val;
 }
@@ -89,7 +93,7 @@ int16_t accel_get_y(void)
 int16_t  accel_get_z (void)
 {
     uint8_t  accel_data[2];
-    uint16_t  z_axis_val;
+    int16_t  z_axis_val;
 
     
     accel_data[0] = DATAZ0;
@@ -98,6 +102,8 @@ int16_t  accel_get_z (void)
     
     z_axis_val    = accel_data[1] << 8;
     z_axis_val   += accel_data[0];
+
+	z_axis_val -= Accel_Z_Zero;
 
     return z_axis_val;
 }
@@ -111,21 +117,18 @@ int16_t  accel_get_z (void)
 
 void  accel_calibrate_zero(void)
 {
-    uint8_t  indx;
-
-
-    BSP_Accel_X_Zero = 0;
-    BSP_Accel_Y_Zero = 0;
-    BSP_Accel_Z_Zero = 0;
+    int X_Zero = 0;
+    int Y_Zero = 0;
+    int Z_Zero = 0;
     
-    for (indx = 0; indx < 8; indx++) {
-        BSP_Accel_X_Zero += accel_get_x();
-        BSP_Accel_Y_Zero += accel_get_y();
-        BSP_Accel_Z_Zero += accel_get_z();
+    for (int i = 0; i < 8; i++) {
+        X_Zero += accel_get_x();
+        Y_Zero += accel_get_y();
+        Z_Zero += accel_get_z();
     }
     
-    BSP_Accel_X_Zero = BSP_Accel_X_Zero / 8;
-    BSP_Accel_Y_Zero = BSP_Accel_Y_Zero / 8;
-    BSP_Accel_Z_Zero = BSP_Accel_Z_Zero / 8;
+    Accel_X_Zero = X_Zero / 8;
+    Accel_Y_Zero = Y_Zero / 8;
+    Accel_Z_Zero = Z_Zero / 8;
 }
 
