@@ -142,7 +142,11 @@
 #include "flop.h"
 
 #include "lcd.h"
+#include "i2c.h"
 #include "temp_board.h"
+#include "accelerometer.h"
+
+#include "stdio.h" 
 
 
 /* Priorities at which the tasks are created. */
@@ -175,7 +179,7 @@ void vApplicationMallocFailedHook( void );
  * vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set to 1
  * in FreeRTOSConfig.h.  It is a hook function that is called on each iteration
  * of the idle task.  It is essential that code added to this hook function
- * never attempts to block in any way (for example, call xQueueReceive() with
+ * never attempts to block in any way (for example, call xQueueReceive() withl
  * a block time specified).  If the application makes use of the vTaskDelete()
  * API function (as this demo application does) then it is also important that
  * vApplicationIdleHook() is permitted to return to its calling function because
@@ -196,19 +200,6 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 
 /*-----------------------------------------------------------*/
 
-/* Variables that are incremented on each iteration of the reg test tasks -
-provided the tasks have not reported any errors.  The check task inspects these
-variables to ensure they are still incrementing as expected.  If a variable
-stops incrementing then it is likely that its associate task has stalled. */
-unsigned long ulRegTest1CycleCount = 0UL, ulRegTest2CycleCount = 0UL;
-
-/* The status message that is displayed at the bottom of the "task stats" web
-page, which is served by the uIP task.  This will report any errors picked up
-by the reg test task. */
-static const char *pcStatusMessage = NULL;
-
-/*-----------------------------------------------------------*/
-
 extern void HardwareSetup( void );
 extern void wifi_driver_task( void *pvParameters );
 void tempature_task(void *pvParameters);
@@ -225,29 +216,16 @@ int main(void)
 	i2c_init();
 	temp_init(); //tempature sensor
 	accel_init(); //accelerometer
-	accel_calibrate_zero();
+	//accel_calibrate_zero();
 
 	
 	// Application Tasks
-	xTaskCreate( wifi_driver_task, ( signed char * ) "wifi_driver", WIFI_DRIVER_STACK_SIZE , NULL, WIFI_DRIVER_TASK_PRIORITY, NULL );
-	xTaskCreate( tempature_task, ( signed char * ) "tempature", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY, NULL );
+	//xTaskCreate( wifi_driver_task, ( signed char * ) "wifi_driver", WIFI_DRIVER_STACK_SIZE , NULL, WIFI_DRIVER_TASK_PRIORITY, NULL );
+	xTaskCreate( tempature_task, ( signed char * ) "tempature", configMINIMAL_STACK_SIZE*2, NULL, tempature_TASK_PRIORITY, NULL );
 	//xTaskCreate( tempature_task, ( signed char * ) "speech-recognition", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 	//xTaskCreate( mic_task, ( signed char * ) "audio-analysis", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 	//xTaskCreate( tempature_task, ( signed char * ) "led_matrix", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 
-
-	/* Create the standard demo tasks. */
-	vStartBlockingQueueTasks( mainBLOCK_Q_PRIORITY );
-	vCreateBlockTimeTasks();
-	vStartSemaphoreTasks( mainSEM_TEST_PRIORITY );
-	vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );
-	vStartIntegerMathTasks( mainINTEGER_TASK_PRIORITY );
-	vStartGenericQueueTasks( mainGEN_QUEUE_TASK_PRIORITY );
-
-	vStartQueuePeekTasks();
-	vStartRecursiveMutexTasks();
-	vStartInterruptQueueTasks();
-	vStartMathTasks( mainFLOP_TASK_PRIORITY );
 
 	/* The suicide tasks must be created last as they need to know how many
 	tasks were running prior to their creation in order to ascertain whether
@@ -257,9 +235,7 @@ int main(void)
 	/* Start the tasks running. */
 	vTaskStartScheduler();
 
-	/* If all is well we will never reach here as the scheduler will now be
-	running.  If we do reach here then it is likely that there was insufficient
-	heap available for the idle task to be created. */
+	debug("error????");
 	for( ;; );
 	
 	return 0;
@@ -303,6 +279,7 @@ void vApplicationMallocFailedHook( void )
 }
 /*-----------------------------------------------------------*/
 
+
 /* This function is explained by the comments above its prototype at the top
 of this file. */
 void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName )
@@ -312,6 +289,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 }
 /*-----------------------------------------------------------*/
 
+
 /* This function is explained by the comments above its prototype at the top
 of this file. */
 void vApplicationIdleHook( void )
@@ -320,57 +298,44 @@ void vApplicationIdleHook( void )
 /*-----------------------------------------------------------*/
 
 
-/*-----------------------------------------------------------*/
-
-
-/*-----------------------------------------------------------*/
-
-char *pcGetTaskStatusMessage( void )
-{
-	/* Not bothered about a critical section here although technically because of
-	the task priorities the pointer could change it will be atomic if not near
-	atomic and its not critical. */
-	if( pcStatusMessage == NULL )
-		
-	{
-		debug("no errorr");
-		return "All tasks running without error";
-	}
-	else
-	{
-		debug("errorr");
-		return ( char * ) pcStatusMessage;
-	}
-}
-
-
 extern void tempature_task(void *pvParameters){
-	 portTickType xLastWakeTime;
-	// update every 60 seconds
- 	const portTickType xFrequency = 10000/portTICK_RATE_MS;
+	portTickType xLastWakeTime;
+
+ 	const portTickType xFrequency = 1000/portTICK_RATE_MS; // update every 1 seconds
 	
-	lcd_string(LCD_LINE2, 0, "Doing TASK X");
+	char str[30];
 
-     // Initialise the xLastWakeTime variable with the current time.
-     xLastWakeTime = xTaskGetTickCount();
+	int16_t x = 0;
+	int16_t y = 0;
+	int16_t z = 0;
 
-     for( ;; )
-     {
-         // Wait for the next cycle.
-         vTaskDelayUntil( &xLastWakeTime, xFrequency );
+	float temp = 0.0f;
 
-	uint16_t x = accel_get_x();
-	uint16_t y = accel_get_y();
-	uint16_t z = accel_get_z();
-	lcd_string(LCD_LINE2, 0, "X = ");
-	lcd_display_number((int)x);
-	lcd_string(LCD_LINE3, 0, "Y = ");
-	lcd_display_number((int)y);
-	lcd_string(LCD_LINE4, 0, "Z = ");
-	lcd_display_number((int)y);
+	xLastWakeTime = xTaskGetTickCount();      // Initialise the xLastWakeTime variable with the current time.
 
-	temp_read(); // get the temperature
+	for( ;; ){
+	
+				
+	
+		/*x = accel_get_x();
+		y = accel_get_y();
+		z = accel_get_z();*/
+		sprintf(str,"X = %i",(int)x);
+		lcd_string(LCD_LINE3, 0, str);	
+		sprintf(str,"Y = %i",(int)y);
+		lcd_string(LCD_LINE4, 0, str);
+		sprintf(str,"Z = %i",(int)z);
+		lcd_string(LCD_LINE5, 0, str);
 
-         // Perform action here.
+
+		temp = temp_read(); 
+		sprintf(str,"temp = %.3f",temp);
+		lcd_string(LCD_LINE7, 0, str);
+
+		vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.
+		ALL_LEDS_ON
+		vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.
+		ALL_LEDS_OFF
      }
 }
+

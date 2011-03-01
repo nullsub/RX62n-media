@@ -7,7 +7,7 @@
 #define   BSP_TEMP_REG    0x00u
 #define   BSP_TEMP_CFG    0x03u
 
-void      temp_init (void);
-float  temp_read(void);
+void	temp_init (void);
+float  	temp_read(void);
 
 #endif

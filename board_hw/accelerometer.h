@@ -14,7 +14,7 @@ void            accel_init     (void);
 int16_t      accel_get_x(void);
 int16_t      accel_get_y(void);
 int16_t     accel_get_z(void);
-void            BSP_Accel_ZeroCal  (void);
+void            accel_calibrate_zero(void);
 
 #define ACCEL_ADDR  (0x3A >> 1)
 
