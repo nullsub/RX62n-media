@@ -3,17 +3,24 @@ This is based upon the FreeRTOS demo, stripped down and improved by Zizzle - mat
 ---------------------------------------------------------------------------------
 
 Current State:
-	I ported the wifi demo code but it doesnt work. I dont know where to find the bug.
+	I ported the wifi demo code but it doesnt work.
+	working:
+		-onboard accelerometer
+		-onboard temperatur sensor
+		-display
 
 Need to add following things:
-	-clock
-	-email client
-	-rss reader
-	-unpn client which can stream mp3 files for a alarm clock
+
+	-get wifi working
+		-clock
+		-email client
+		-rss reader
+		-unpn client which can stream mp3/ogg files for a alarm clock
+	
 	-interface to my 16x16 LED matrix
 	-interface to my 4x4 LED cube
+	
 	-use build in microphone for FFT-->Music visualisation on the LEDs (start with Vu-meter)
-	-temperature sensor interface both on board and external (i2c)ds18xxx chip
 		
 
 
