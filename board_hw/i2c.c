@@ -36,7 +36,11 @@
 #include  "iodefine.h"
 #include "i2c.h"
 
+#include "FreeRTOS.h"
+#include "semphr.h"
 
+
+static xSemaphoreHandle i2c_mutex;
 
 
 /*
@@ -47,9 +51,11 @@
 
 void  i2c_init(void)
 {
-    
 
-    //BSP_OS_RIIC0_MutexPend();                    /* Request mutex, block until mutex obtained          */
+
+    	i2c_mutex = xSemaphoreCreateMutex();                    /* Request mutex, block until mutex obtained          */
+	
+	xSemaphoreTake(i2c_mutex,portMAX_DELAY);
 
     MSTP(RIIC0)            =  0;                 /* enable RIIC channel 0 in module stop register      */
 
@@ -78,7 +84,7 @@ void  i2c_init(void)
 
     RIIC0.ICCR1.BIT.ICE    =  1;                 /* RIIC0 enabled                                      */
 
-  //  BSP_OS_RIIC0_MutexPost();                    /* release mutex                                      */
+	xSemaphoreGive(i2c_mutex);                    /* release mutex                                      */
 }
 
 
@@ -106,7 +112,7 @@ void  BSP_RIIC0_MasterRd(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  s
     RxData      = p_data;
     RxBytesLeft = len;
 
-   // BSP_OS_RIIC0_MutexPend();                    /* Request mutex, block until mutex obtained          */
+	xSemaphoreTake(i2c_mutex,portMAX_DELAY);                    /* Request mutex, block until mutex obtained          */
 
     if(start == true){                       /* Generate a frame with a start condition            */
                                                 
@@ -177,7 +183,7 @@ void  BSP_RIIC0_MasterRd(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  s
 
     RIIC0.ICSR2.BIT.STOP     = 0;
 
-//    BSP_OS_RIIC0_MutexPost();                    /* release mutex                                      */
+	xSemaphoreGive(i2c_mutex);                    /* release mutex                                      */
 }
 
 
@@ -204,7 +210,7 @@ void  BSP_RIIC0_MasterWr(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  s
     TxData      = p_data;
     TxBytesLeft = len;
 
-   // BSP_OS_RIIC0_MutexPend();                    /* Request mutex, block until mutex obtained          */
+	xSemaphoreTake(i2c_mutex,portMAX_DELAY);                   /* Request mutex, block until mutex obtained          */
 
     while (RIIC0.ICCR2.BIT.BBSY == 1);         /* check bus is available                             */
 
@@ -242,7 +248,7 @@ void  BSP_RIIC0_MasterWr(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  s
     RIIC0.ICSR2.BIT.NACKF = 0;
     RIIC0.ICSR2.BIT.STOP  = 0;
 
-  //  BSP_OS_RIIC0_MutexPost();                    /* release mutex                                      */
+	xSemaphoreGive(i2c_mutex);                    /* release mutex                                      */
 }
 
 
