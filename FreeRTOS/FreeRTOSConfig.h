@@ -83,7 +83,7 @@
 #define configIDLE_SHOULD_YIELD			1
 #define configUSE_CO_ROUTINES 			0
 #define configUSE_MUTEXES			1
-#define configGENERATE_RUN_TIME_STATS	1
+#define configGENERATE_RUN_TIME_STATS	0  // needs high frequency timer... I removed it...
 #define configCHECK_FOR_STACK_OVERFLOW	2
 #define configUSE_RECURSIVE_MUTEXES		1
 #define configQUEUE_REGISTRY_SIZE		0
@@ -115,7 +115,7 @@ to exclude the API function. */
 #define INCLUDE_uxTaskGetStackHighWaterMark	1
 #define INCLUDE_xTaskGetSchedulerState		1
 
-extern volatile unsigned long ulHighFrequencyTickCount;
+extern volatile unsigned long ulHighFrequencyTickCount; // removed it11
 #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() portNOP() /* Run time stats use the same timer as the high frequency timer test. */
 #define portGET_RUN_TIME_COUNTER_VALUE() ulHighFrequencyTickCount
 

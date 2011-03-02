@@ -22,7 +22,7 @@ extern void vSoftwareInterruptISR( void );
 extern void vT0_1_ISR_Handler( void );
 extern void vT2_3_ISR_Handler( void );
 extern void vEMAC_ISR_Handler( void );
-extern void vTimer2_ISR_Handler( void );
+//extern void vTimer2_ISR_HandlervTimer2_ISR_Handler( void );
 
 #define FVECT_SECT          __attribute__ ((section (".fvectors")))
 
@@ -160,7 +160,7 @@ const fp RelocatableVectors[] RVECT_SECT  = {
 //;0x0074  CMTU0_CMT1
 	(fp)INT_Excep_CMTU0_CMT1,
 //;0x0078  CMTU1_CMT2
-	(fp)vTimer2_ISR_Handler,
+	(fp)0,//vTimer2_ISR_Handler,
 //;0x007C  CMTU1_CMT3
 	(fp)INT_Excep_CMTU1_CMT3,
 //;0x0080  Ether

@@ -45,14 +45,12 @@ CFILES_ENET = \
 	FreeRTOS/flop.c \
 	FreeRTOS/integer.c \
 	FreeRTOS/recmutex.c \
-	FreeRTOS/semtest.c \
 	board_hw/start.asm \
 	ethernet/FreeTCPIP/psock.c \
 	ethernet/FreeTCPIP/timer.c \
 	ethernet/FreeTCPIP/uip.c \
 	ethernet/FreeTCPIP/uip_arp.c \
 	inthandler.c \
-	HighFrequencyTimerTest.c \
 	IntQueueTimer.c \
 	board_hw/hwsetup.c \
 	main.c \
