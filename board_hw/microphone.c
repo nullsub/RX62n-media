@@ -5,20 +5,31 @@
 #include "microphone.h"
 #include "board.h" // leds on...
 
+#include "FreeRTOS.h"
+#include "task.h"
+
 uint16_t samples[N_SAMPLES];
 int sample_idx;
 volatile int mic_samples = 0;
 
-void Interrupt_ADC1(void)
+void Interrupt_ADC1(void)  __attribute((interrupt));
+
+void Interrupt_ADC1(void) 
 {
+	/* Re-enabled interrupts. */
+	__asm volatile( "SETPSW	I" );	
+
 	uint16_t sample;
 	mic_samples++;
 	sample = AD1.ADDRB;
 	samples[sample_idx] = sample;
 	if (++sample_idx == N_SAMPLES){
 		sample_idx = 0;
+		if (sample_idx == N_SAMPLES+2){
+			ALL_LEDS_ON
+		}
 	}
-	ALL_LEDS_ON 
+	 
 }
 
 void adc_trigger_enable(char en)
@@ -29,6 +40,9 @@ void adc_trigger_enable(char en)
 
 void adc_init()
 {
+		ALL_LEDS_OFF
+	portENTER_CRITICAL();
+	{
 	/* 34.3.8 A/D converter activation with TMTRG0AN_0 of TMR */
 	/* TCORA of TMR unit 0 in channel 0 */
 
@@ -58,13 +72,18 @@ void adc_init()
 	TMR0.TCCR.BIT.CSS = 1;	// clock source select, 1=internal clock
 
 	// if you need timer interrupt for purpose other than adc trigger
-	IPR(TMR0, CMIA0) = 1;	// set interrupt priority
+	//IPR(TMR0, CMIA0) = 1;	
+	IPR(TMR0, CMIA0 ) = configMAX_SYSCALL_INTERRUPT_PRIORITY - 1;  // = 1 // set interrupt priority
 	IEN(TMR0, CMIA0) = 1;	// enable interrupt in the ICU
 
 	sample_idx = 0;
 
 	/********************* amp enable pin ***************************/
-	AMP_SHDN_DDR = 0xFF;//OUTPUT_PIN;
+	AMP_SHDN_DDR = 255;//OUTPUT_PIN;
 	AMP_SHDN = 0;	// default to shut down
+	}	
+	portEXIT_CRITICAL();
+	
+
 }
 

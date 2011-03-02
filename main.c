@@ -129,12 +129,10 @@
 
 /* Standard demo includes. */
 
-#include "IntQueue.h"
 #include "BlockQ.h"
 #include "death.h"
 #include "integer.h"
 #include "blocktim.h"
-#include "semtest.h"
 #include "PollQ.h"
 #include "GenQTest.h"
 #include "QPeek.h"
@@ -152,7 +150,6 @@
 
 /* Priorities at which the tasks are created. */
 #define mainQUEUE_POLL_PRIORITY		( tskIDLE_PRIORITY + 1 )
-#define mainSEM_TEST_PRIORITY		( tskIDLE_PRIORITY + 1 )
 #define mainBLOCK_Q_PRIORITY		( tskIDLE_PRIORITY + 2 )
 #define mainCREATOR_TASK_PRIORITY   ( tskIDLE_PRIORITY + 3 )
 #define WIFI_DRIVER_TASK_PRIORITY		( tskIDLE_PRIORITY)
@@ -308,6 +305,8 @@ void microphone_task(void *pvParameters){
 	xLastWakeTime = xTaskGetTickCount();      // Initialise the xLastWakeTime variable with the current time.
 	while(1){
 			vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.
+			sprintf(str, "%x %i %i", samples[0], samples[4], samples[8]);
+			lcd_string(LCD_LINE1, 0, str);	
 	}
 }
 
