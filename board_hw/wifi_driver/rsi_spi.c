@@ -106,12 +106,12 @@ int32_t rsi_spi_init(void)
 						     // Once we get an interrupt we will make it as 1
 	Adaptor.Data_recieved = 0;
 	Adaptor.join_count    = 0;
-    Adaptor.socket_created = 0;
+	Adaptor.socket_created = 0;
   	Adaptor.tcp_configured = FALSE;
   	Adaptor.sock0_created = 0;
 	Adaptor.sock1_created = 0;
   	Adaptor.norsp = 0;
-    Adaptor.image_upgrade = FIRMWARE_UPGRADE;
+	Adaptor.image_upgrade = FIRMWARE_UPGRADE;
   	/* Preparing data */
   	for(ii = 0; ii < 1400; ii++)
   	{

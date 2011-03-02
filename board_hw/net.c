@@ -125,7 +125,6 @@ void wifi_driver_task( void *pvParameters )
    }
 }
 
-
 void debug(char * str){
 		/* De-Assert the CS for spi device - WIFI */
     PORTC.DR.BIT.B1 = 1 ;	

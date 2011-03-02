@@ -18,17 +18,9 @@ CFLAGS = \
 
 CFILES_ENET = \
 	board_hw/temp_board.c \
-	board_hw/net.c \
 	board_hw/microphone.c \
 	board_hw/i2c.c \
 	board_hw/accelerometer.c \
-	board_hw/wifi_driver/network_config.c \
-	board_hw/wifi_driver/process_data.c \
-	board_hw/wifi_driver/rs22_spi_bus.c \
-	board_hw/wifi_driver/rs22_spi_pine.c \
-	board_hw/wifi_driver/rs22_ssp_hcd.c \
-	board_hw/wifi_driver/rsi_spi.c \
-	board_hw/wifi_driver/rsi_util.c \
 	board_hw/spi_driver.c \
 	ethernet/memb.c \
 	telnetd/telnetd.c \
@@ -54,6 +46,15 @@ CFILES_ENET = \
 	FreeRTOS/queue.c \
 	FreeRTOS/tasks.c \
 	$(END)
+
+#	board_hw/net.c \
+#	board_hw/wifi_driver/network_config.c \
+#	board_hw/wifi_driver/process_data.c \
+#	board_hw/wifi_driver/rs22_spi_bus.c \
+#	board_hw/wifi_driver/rs22_spi_pine.c \
+#	board_hw/wifi_driver/rs22_ssp_hcd.c \
+#	board_hw/wifi_driver/rsi_spi.c \
+#	board_hw/wifi_driver/rsi_util.c \
 
 OFILES := $(addsuffix .o,$(basename $(CFILES_ENET)))
 

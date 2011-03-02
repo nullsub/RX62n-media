@@ -29,24 +29,10 @@ Ver  By         date          Description
 #include      <stdint.h>
 #include      <stdbool.h>
 //#include 	  "rs22_nic.h"
-//#include	  "spi_driver.h"
-//#include      "iodefine.h"
-
 
 
 #define SOCK_HANDLE1             1
 #define SOCK_HANDLE0             0
-
-/*
-typedef unsigned char            uint8_t;
-typedef char                     int8_t;
-typedef unsigned int             uint32_t;
-typedef          int             int32_t;
-typedef short int                int16_t;
-typedef unsigned short int       uint16_t;
-*/
-//typedef unsigned char            bool;
-typedef float                    float_t;
 
 #define   RSI_STATUS_FAILURE              -1
 #define   RSI_STATUS_SUCCESS               0
@@ -54,9 +40,8 @@ typedef float                    float_t;
 #define   RSI_STATUS_SUCCESS                0
 #define   RSI_STATUS_BUSY                   1
 #define   RSI_STATUS_FAIL                  -1
-#define   RS22_JOIN_FAILURE                -5
-#define   DISCONNECT						0
-
+#define   RS22_JOIN_FAILURE			-5
+#define   DISCONNECT				0
 
 #define  LOW              0
 #define  MEDIUM           1
@@ -79,3 +64,4 @@ typedef float                    float_t;
 #define LOAD_INST_FROM_HOST
 
 #endif
+

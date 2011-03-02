@@ -24,6 +24,8 @@ Sl  By           date        change     details
 *END*************************************************************************/
 #include "includes.h"
 #include "rsi_nic.h"
+#include "rs22_nic.h"
+
 
 /*FUNCTION*********************************************************************
 Function Name  : rs22_ssp_bus_request_synch

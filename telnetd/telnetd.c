@@ -134,16 +134,14 @@ shell_output(char *str1, char *str2)
   }
 }
 /*---------------------------------------------------------------------------*/
-void
-telnetd_init(void)
+void telnetd_init(void)
 {
   uip_listen(HTONS(23));
   memb_init(&linemem);
   shell_init();
 }
 /*---------------------------------------------------------------------------*/
-static void
-acked(void)
+static void acked(void)
 {
   static unsigned int i;
   
@@ -157,8 +155,7 @@ acked(void)
   }
 }
 /*---------------------------------------------------------------------------*/
-static void
-senddata(void)
+static void senddata(void)
 {
   static char *bufptr, *lineptr;
   static int buflen, linelen;
@@ -183,8 +180,7 @@ senddata(void)
   uip_send(uip_appdata, buflen);
 }
 /*---------------------------------------------------------------------------*/
-static void
-closed(void)
+static void closed(void)
 {
   static unsigned int i;
   
@@ -195,8 +191,7 @@ closed(void)
   }
 }
 /*---------------------------------------------------------------------------*/
-static void
-get_char(u8_t c)
+static void get_char(u8_t c)
 {
   if(c == ISO_cr) {
     return;
@@ -216,8 +211,7 @@ get_char(u8_t c)
   }
 }
 /*---------------------------------------------------------------------------*/
-static void
-sendopt(u8_t option, u8_t value)
+static void sendopt(u8_t option, u8_t value)
 {
   char *line;
   line = alloc_line();
@@ -230,8 +224,7 @@ sendopt(u8_t option, u8_t value)
   }
 }
 /*---------------------------------------------------------------------------*/
-static void
-newdata(void)
+static void newdata(void)
 {
   u16_t len;
   u8_t c;
@@ -305,8 +298,7 @@ newdata(void)
   
 }
 /*---------------------------------------------------------------------------*/
-void
-telnetd_appcall(void)
+void telnetd_appcall(void)
 {
   static unsigned int i;
   if(uip_connected()) {
@@ -349,3 +341,4 @@ telnetd_appcall(void)
   }
 }
 /*---------------------------------------------------------------------------*/
+

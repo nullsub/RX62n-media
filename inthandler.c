@@ -14,6 +14,9 @@
 
 #include "inthandler.h"
 #include "iodefine.h"
+
+extern void rsi_external_inerrupt_handler();
+
 #pragma section IntPRG
 
 // Exception(Supervisor Instruction)
@@ -98,7 +101,7 @@ void INT_Excep_IRQ12(void){ }
 
 void INT_Excep_IRQ13(void){
 	//debug("im INT");
-	rsi_external_inerrupt_handler();
+//	rsi_external_inerrupt_handler();
 	ICU.IER[9].BIT.IEN5 = 0;
 }
 

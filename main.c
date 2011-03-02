@@ -192,7 +192,15 @@ extern void wifi_driver_task( void *pvParameters );
 void temp_accel_task(void *pvParameters);
 void microphone_task(void *pvParameters);
 
-extern void debug(char *str);
+void debug(char * str){
+		/* De-Assert the CS for spi device - WIFI */
+    PORTC.DR.BIT.B1 = 1 ;	
+  PORTC.DR.BIT.B2 = 0	  ;
+	lcd_string(LCD_LINE7,0 ,str);
+	/* Re-Assert the CS for spi device - WIFI */
+  PORTC.DR.BIT.B2 = 1	  ;
+    PORTC.DR.BIT.B1 = 0 ;	
+}
 
 int main(void)
 {

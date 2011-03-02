@@ -47,6 +47,7 @@ void telnetd_appcall(void);
 #define TELNETD_CONF_NUMLINES 16
 #endif
 
+void telnetd_init();
 
 struct telnetd_state {
   char *lines[TELNETD_CONF_NUMLINES];
