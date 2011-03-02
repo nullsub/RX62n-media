@@ -27,6 +27,12 @@ Sl  By           date        change     details
 #include "includes.h"
 
 
+#include "FreeRTOS.h"
+#include "semphr.h"
+
+
+static xSemaphoreHandle spi_mutex;
+
 unsigned char *msg_string;
 volatile int global_flag = 0;
 volatile unsigned int glbl_count = 0;
@@ -43,8 +49,12 @@ spi_data_t  spi_data_reg;
 unsigned int glbl_flag1 = 0;
 volatile unsigned char TEMP_RDR;
 volatile unsigned int global_flag1 = 0;
+
 void rsi_spi_MasterInit(void )
 {
+    	spi_mutex = xSemaphoreCreateMutex();                    /* Request mutex, block until mutex obtained          */
+	
+	xSemaphoreTake(spi_mutex, portMAX_DELAY);
 
    MSTP(RSPI0) = 0 ;
 
@@ -124,6 +134,8 @@ void rsi_spi_MasterInit(void )
 
 	ICU.IPR[0x2D].BIT.IPR = 0xe; //1111 is highest
 	ICU.IER[9].BIT.IEN5 = 1;
+
+	xSemaphoreGive(spi_mutex);
 	
 }
 
@@ -135,21 +147,24 @@ volatile unsigned int rx_int_count = 0;
 
 
 uint32_t glbl_cnt = 0;
+
 void SPI_MasterTransceiveByte(uint8_t *src_data, uint8_t *dst_data,
                               uint32_t len)
 {    
+	xSemaphoreTake(spi_mutex, portMAX_DELAY);
+
 	unsigned int bit_count = 0;
 
-      rx_buf = 0;
-	  glbl_count = 0;
-	  src_junk_flag = 0;
-      dst_junk_flag = 0;
-	  spi_data_reg.TX_DATA = NULL;
-	  spi_data_reg.len = 0;
-      tx_int_count = 0;
-      rx_int_count = 0;
-      glbl_flag1 = 0;
-      intr = 0;
+	rx_buf = 0;
+	glbl_count = 0;
+	src_junk_flag = 0;
+	dst_junk_flag = 0;
+	spi_data_reg.TX_DATA = NULL;
+	spi_data_reg.len = 0;
+	tx_int_count = 0;
+	rx_int_count = 0;
+	glbl_flag1 = 0;
+	intr = 0;
 	  
 	  
 	  if(src_data != NULL)
@@ -176,76 +191,36 @@ void SPI_MasterTransceiveByte(uint8_t *src_data, uint8_t *dst_data,
 	spi_data_reg.len = len; 
 	
 
-    if(spi_data_reg.len)
+	if(spi_data_reg.len)
 	{
-	 for (bit_count=0; bit_count < spi_data_reg.len; bit_count++)
-	 {	 
-		while (RSPI0.SPSR.BIT.IDLNF) ;
+	 	for (bit_count=0; bit_count < spi_data_reg.len; bit_count++)
+	 	{	 
+			while (RSPI0.SPSR.BIT.IDLNF) ;
 		
-    	/* short 16 bits */
-    	RSPI0.SPDR.WORD.H = *(spi_data_reg.TX_DATA + bit_count);
-    	/* Wait for transfer to complete */
-    	while (RSPI0.SPSR.BIT.IDLNF) ;		
+    			/* short 16 bits */
+    			RSPI0.SPDR.WORD.H = *(spi_data_reg.TX_DATA + bit_count);
+    			/* Wait for transfer to complete */
+    			while (RSPI0.SPSR.BIT.IDLNF) ;		
 
-       if(RSPI0.SPCR.BIT.TXMD == 0)
-		{			
-			if(RSPI0.SPSR.BIT.OVRF == 0)
-			{
-				*(msg_string + bit_count) = RSPI0.SPDR.WORD.H;
-			}
-			else
-			{
-				TEMP_RDR = (uint8_t)RSPI0.SPDR.WORD.H;
-				RSPI0.SPSR.BIT.OVRF = 0;
-				break;
-			}
-		}
-        	
-
-	 }
-  
-	}
-   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*			
-			if (len <= 4)
-			{
-				temp = SCI3.RDR;
-				if(temp == 0x54)
+			if(RSPI0.SPCR.BIT.TXMD == 0)
+			{			
+				if(RSPI0.SPSR.BIT.OVRF == 0)
 				{
-					msg_string[2] = temp;
-					SCI3.SCR.BYTE = (SCI3.SCR.BYTE & 0x03);
+					*(msg_string + bit_count) = RSPI0.SPDR.WORD.H;
+				}
+				else
+				{
+					TEMP_RDR = (uint8_t)RSPI0.SPDR.WORD.H;
+					RSPI0.SPSR.BIT.OVRF = 0;
 					break;
 				}
-			  	
 			}
-*/
+		}
+	}
 
+	xSemaphoreGive(spi_mutex);
+	
+   }
 
 
 
