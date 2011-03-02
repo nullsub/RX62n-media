@@ -57,8 +57,8 @@ parse(register char *str, struct ptentry *t)
   p->pfunc(str);
 }
 /*---------------------------------------------------------------------------*/
-static void
-inttostr(register char *str, unsigned int i)
+#if 0 // not used
+static void inttostr(register char *str, unsigned int i)
 {
   str[0] = '0' + i / 100;
   if(str[0] == '0') {
@@ -72,9 +72,9 @@ inttostr(register char *str, unsigned int i)
   str[3] = ' ';
   str[4] = 0;
 }
+#endif
 /*---------------------------------------------------------------------------*/
-static void
-help(char *str)
+static void help(char *str)
 {
   shell_output("Available commands:", "");
   shell_output("stats   - show network statistics", "");

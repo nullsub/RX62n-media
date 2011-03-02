@@ -175,7 +175,7 @@ void INT_Excep_IRQ11(void) __attribute__ ((interrupt));
 void INT_Excep_IRQ12(void) __attribute__ ((interrupt));
 
 // IRQ13
-#pragma interrupt (INT_Excep_IRQ13(vect=77))
+//#pragma interrupt (INT_Excep_IRQ13(vect=77))
 void INT_Excep_IRQ13(void) __attribute__ ((interrupt));
 
 // IRQ14

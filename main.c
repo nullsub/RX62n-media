@@ -334,7 +334,7 @@ void temp_accel_task(void *pvParameters){
 
 
 		temp = temp_read(); 
-		sprintf(str,"temp = %.3f",temp);
+		sprintf(str,"temp = %.3f",(double)temp);
 		lcd_string(LCD_LINE5, 0, str);
 
 		vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.

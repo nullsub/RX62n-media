@@ -82,7 +82,7 @@
 /*
  * Setup the MAC address in the MAC itself, and in the uIP stack.
  */
-static void prvSetMACAddress( void );
+//static void prvSetMACAddress( void );
 
 /*
  * Port functions required by the uIP stack.
@@ -223,7 +223,7 @@ struct timer periodic_timer, arp_timer;
 #endif
 }
 /*-----------------------------------------------------------*/
-
+#if 0
 static void prvSetMACAddress( void )
 {
 struct uip_eth_addr xAddr;
@@ -237,6 +237,7 @@ struct uip_eth_addr xAddr;
 	xAddr.addr[ 5 ] = configMAC_ADDR5;
 	uip_setethaddr( xAddr );
 }
+#endif
 /*-----------------------------------------------------------*/
 
 void vApplicationProcessFormInput( char *pcInputString )

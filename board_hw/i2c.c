@@ -203,7 +203,7 @@ void  BSP_RIIC0_MasterRd(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  s
 */
 void  BSP_RIIC0_MasterWr(uint8_t  addr, uint8_t *p_data, uint32_t   len, bool  stop)
 {
-    int8_t  *TxData;
+    uint8_t  *TxData;
     uint8_t   TxBytesLeft;
 
 

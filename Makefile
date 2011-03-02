@@ -15,6 +15,10 @@ CFLAGS = \
 	-std=c99 \
 	$(END)
 
+#-Wall \
+#-Werror \
+#-Wextra \
+
 
 CFILES_ENET = \
 	board_hw/temp_board.c \

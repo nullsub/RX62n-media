@@ -17,7 +17,7 @@
 
 extern void rsi_external_inerrupt_handler();
 
-#pragma section IntPRG
+//#pragma section IntPRG
 
 // Exception(Supervisor Instruction)
 void INT_Excep_SuperVisorInst(void){/* brk(); */}

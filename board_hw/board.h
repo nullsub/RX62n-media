@@ -105,21 +105,10 @@ extern int16_t       SockHandle1;
 #define CLR_PUSH_BUTTON_FLAG   (push_button_pressed = 0)
 #define ENABLE_SW_IRQ enable_push_button_irq()
 
-
-#define ENABLE_IRQ   enable_irq()	/* enables all maskable interrupts */
-#define DISABLE_IRQ	 disable_irq()  /* disables all maskable interrupts */
-
-
-
 extern uint8_t tx_switch_buff[5];
 extern volatile uint32_t push_button_pressed;
 
 void enable_push_button_irq(void);
-#pragma inline_asm disable_irq
-void disable_irq(void);
-
-#pragma inline_asm enable_irq
-void enable_irq(void);
 
 
 #endif

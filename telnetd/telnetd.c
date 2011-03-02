@@ -76,8 +76,7 @@ dealloc_line(char *line)
   memb_free(&linemem, line);
 }
 /*---------------------------------------------------------------------------*/
-void
-shell_quit(char *str)
+void shell_quit(char *str)
 {
   s.state = STATE_CLOSE;
 }
