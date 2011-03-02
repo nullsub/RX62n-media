@@ -37,7 +37,6 @@ CFILES_ENET = \
 	ethernet/ip_apps.c \
 	FreeRTOS/BlockQ.c \
 	FreeRTOS/GenQTest.c \
-	FreeRTOS/IntQueue.c \
 	FreeRTOS/PollQ.c \
 	FreeRTOS/QPeek.c \
 	FreeRTOS/blocktim.c \
@@ -51,7 +50,6 @@ CFILES_ENET = \
 	ethernet/FreeTCPIP/uip.c \
 	ethernet/FreeTCPIP/uip_arp.c \
 	inthandler.c \
-	IntQueueTimer.c \
 	board_hw/hwsetup.c \
 	main.c \
 	uIP_Task.c \
