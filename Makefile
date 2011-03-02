@@ -55,19 +55,6 @@ CFILES_ENET = \
 	FreeRTOS/tasks.c \
 	$(END)
 
-CFILES = \
-	start.asm \
-	board_hw/vects.c \
-	FreeRTOS/list.c \
-	FreeRTOS/queue.c \
-	FreeRTOS/tasks.c \
-	FreeRTOS/portable/MemMang/heap_2.c \
-	FreeRTOS/portable/GCC/RX600/port.c \
-	hwinit.c \
-	inthandler.c \
-	hwsetup.c \
-	$(END)st
-
 OFILES := $(addsuffix .o,$(basename $(CFILES_ENET)))
 
 freertos.elf : $(OFILES)

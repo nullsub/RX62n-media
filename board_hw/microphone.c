@@ -79,7 +79,7 @@ void adc_init()
 	sample_idx = 0;
 
 	/********************* amp enable pin ***************************/
-	AMP_SHDN_DDR = 255;//OUTPUT_PIN;
+	AMP_SHDN_DDR = -1;//OUTPUT_PIN;
 	AMP_SHDN = 0;	// default to shut down
 	}	
 	portEXIT_CRITICAL();

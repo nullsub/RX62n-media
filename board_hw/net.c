@@ -1,7 +1,12 @@
 
+#include "FreeRTOS.h"
+#include "task.h"
+
+
 /* Header file includes */
 #include "includes.h"
 #include "rsi_spi.h"
+#include "rsi_api.h"
 #include "board.h"
 #include "process_data.h"
 #include "rsi_util.h"
@@ -9,6 +14,8 @@
 #include "network_config.h"
 #include "lcd.h"
 #include "iodefine.h"
+
+
 
 /* Global variables */
 networkConfig_t networkConfig;
@@ -49,32 +56,32 @@ Name             | I/P | O/P | I/O | Purpose
 *END****************************************************************************/
 void wifi_driver_task( void *pvParameters )
 {
-  int16_t  			rssi_value = 0;
-  int32_t  			send_count = 0;
-  uint32_t 			size;
-  volatile int32_t  val = 0;   
+	int16_t  			rssi_value = 0;
+	int32_t  			send_count = 0;
+	uint32_t 			size;
+	volatile int32_t  val = 0;   
 
-  debug ("start");
-ENABLE_LEDS;
+	debug ("start");
+	ENABLE_LEDS;
 	ALL_LEDS_OFF;
 	
-   if((rsi_poweron_device()) == RSI_STATUS_FAILURE)
-   {
-	  displayInfo(SPI_INIT_FAILED); 
+	if((rsi_poweron_device()) == RSI_STATUS_FAILURE)
+	{
+		displayInfo(SPI_INIT_FAILED); 
 		vTaskSuspend(NULL); // lets suspend ourself
-	  while(1);	   
-   }
+		while(1);	   
+	}
     
    	/* After Data Flash Area is enabled, you can access Data Flash Memory */
-   if( FIRMWARE_UPGRADE == ENABLE )
-   {
-	 displayInfo(IMAGE_UPGRADE); 
-   }   
-   else
-   {
-     displayInfo(IN_PROGRESS);
-   }    
-   rsi_configure_device();   
+	if( FIRMWARE_UPGRADE == ENABLE )
+	{
+		displayInfo(IMAGE_UPGRADE); 
+	}   
+	else
+	{
+		displayInfo(IN_PROGRESS);
+	}    
+	rsi_configure_device();   
 
 	debug("i am here");
 
