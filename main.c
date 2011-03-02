@@ -127,18 +127,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-/* Standard demo includes. */
-
-#include "BlockQ.h"
-#include "death.h"
-#include "integer.h"
-#include "blocktim.h"
-#include "PollQ.h"
-#include "GenQTest.h"
-#include "QPeek.h"
-#include "recmutex.h"
-#include "flop.h"
-
 #include "lcd.h"
 #include "i2c.h"
 #include "temp_board.h"
@@ -227,12 +215,6 @@ int main(void)
 	//xTaskCreate( mic_task, ( signed char * ) "audio-analysis", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 	//xTaskCreate( tempature_task, ( signed char * ) "led_matrix", configMINIMAL_STACK_SIZE, NULL, tempature_TASK_PRIORITY	, NULL );
 
-
-	/* The suicide tasks must be created last as they need to know how many
-	tasks were running prior to their creation in order to ascertain whether
-	or not the correct/expected number of tasks are running at any given time. */
-	vCreateSuicidalTasks( mainCREATOR_TASK_PRIORITY );
-
 	/* Start the tasks running. */
 	vTaskStartScheduler();
 
@@ -304,9 +286,12 @@ void microphone_task(void *pvParameters){
  	const portTickType xFrequency = 1000/portTICK_RATE_MS; // update every 1 seconds
 	xLastWakeTime = xTaskGetTickCount();      // Initialise the xLastWakeTime variable with the current time.
 	while(1){
-			vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.
 			sprintf(str, "%x %i %i", samples[0], samples[4], samples[8]);
 			lcd_string(LCD_LINE1, 0, str);	
+			vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.
+			ALL_LEDS_OFF
+			vTaskDelayUntil( &xLastWakeTime, xFrequency ); // Wait for the next cycle.
+			ALL_LEDS_ON
 	}
 }
 

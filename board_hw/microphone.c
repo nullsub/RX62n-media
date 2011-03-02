@@ -26,7 +26,7 @@ void Interrupt_ADC1(void)
 	if (++sample_idx == N_SAMPLES){
 		sample_idx = 0;
 		if (sample_idx == N_SAMPLES+2){
-			ALL_LEDS_ON
+		//	ALL_LEDS_ON
 		}
 	}
 	 

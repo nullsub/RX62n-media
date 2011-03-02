@@ -11,7 +11,6 @@ CFLAGS = \
 	-I ethernet/FreeTCPIP/net \
 	-I FreeRTOS/include \
 	-I FreeRTOS/portable/GCC/RX600 \
-	-I FreeRTOS \
 	-I ethernet/FreeTCPIP/sys \
 	-std=c99 \
 	$(END)
@@ -35,15 +34,6 @@ CFILES_ENET = \
 	telnetd/telnetd.c \
 	telnetd/shell.c \
 	ethernet/ip_apps.c \
-	FreeRTOS/BlockQ.c \
-	FreeRTOS/GenQTest.c \
-	FreeRTOS/PollQ.c \
-	FreeRTOS/QPeek.c \
-	FreeRTOS/blocktim.c \
-	FreeRTOS/death.c \
-	FreeRTOS/flop.c \
-	FreeRTOS/integer.c \
-	FreeRTOS/recmutex.c \
 	board_hw/start.asm \
 	ethernet/FreeTCPIP/psock.c \
 	ethernet/FreeTCPIP/timer.c \
