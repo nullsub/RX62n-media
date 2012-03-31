@@ -76,7 +76,7 @@ freertos.elf : $(OFILES)
 	rx-elf-gcc -x assembler-with-cpp -c $(CFLAGS) -O2 $< -o $@
 
 flash : freertos.elf
-	sudo ../flash-tools/rxusb -v freertos.elf
+	sudo flash-tools/rxusb -v freertos.elf
 
 clean :
 	rm -f $(OFILES) freertos.elf
